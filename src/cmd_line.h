@@ -67,6 +67,13 @@ public:
     /// bootstrap
     int n_bootstraps ;
     int block_size ; 
+
+    /// +=+=+=+=+=+=+ selection +=+=+=+=+=+=+
+    bool is_limit;
+    string limit_chr ;
+    int limit_win_start ;
+    int limit_win_end ;
+    int sel_site ;
     
     /// read relevant information
     void read_cmd_line ( int argc, char *argv[] ) ;

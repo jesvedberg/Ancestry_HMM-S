@@ -76,6 +76,9 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
     /// bootstraps
     n_bootstraps = 0 ;
     block_size = 0 ;
+
+    // selection
+    is_limit = false ;
     
 	/// accept command line parameters
 	for (int i=1; i<argc; i++) {
@@ -117,7 +120,30 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
             ancestry_pulses.push_back( new_ancestry_pulse ) ;
             ancestry_pulses.back().entry_order = ancestry_pulses.size() - 1 ;
         }
+
+
+        /// activate selection detection module
+        /// uses the following format -j chromosome_of_interest (str) site_of_interest start_window (int) 
+        /// window_start (int) window_end (int)
+        if ( strcmp(argv[i],"-j") == 0 ) {
+            is_limit = true ;
+            limit_chr = string(argv[++i]) ;
+            limit_win_start = atoi(argv[++i]) ;
+            limit_win_end = atoi(argv[++i]) ;
+            sel_site = atoi(argv[++i]) ;
+
+            cerr << endl << limit_chr << "\t" << limit_win_start << "\t" << limit_win_end << "\t" << sel_site << endl ;
+
+            /// check if win_start < win_end and site is located within window
+            if ( limit_win_end < limit_win_start || limit_win_end < sel_site || sel_site < limit_win_start ) {
+                cerr << "\n\n\t\t ERROR: formatting for selected site and window is wrong\n\n" ;
+                print_usage() ;
+                exit(1) ;
+            }
+        }
     
+
+
         //// for each ancestry type, set the total ancestry fraction
         //// this must be set and equal to all the ancestry types listed above
         if ( strcmp(argv[i],"-a") == 0 ) {

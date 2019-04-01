@@ -1,7 +1,7 @@
 #ifndef __READ_INPUT_H
 #define __READ_INPUT_H
 
-void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_information, map<int,vector<vector<int> > > &state_list, vector<int> &position, vector<double> &recombination_rate, vector<string> &chromosomes ) {
+void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_information, map<int,vector<vector<int> > > &state_list, vector<int> &position, vector<double> &recombination_rate, vector<string> &chromosomes, int &sel_pos ) {
     
     /// vector to hold index of inbred path if we have variable ploidy
     vector<int> path_index( markov_chain_information.size(), 0 ) ;
@@ -13,17 +13,38 @@ void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_informati
     double extra_recombination = 1 ;
     string last_chrom = "" ;
     
+    /// iterator to find selected_site
+    int ipos = 0;
+
     while( !in.eof() ) {
         
         input_line new_line ;
         in >> new_line.chrom >> new_line.pos ;
+
+
+        /// Limits the genomic region to be parsed ifa range of interest is specified
+        ///(so far only for selection analysis)
+        if (options.is_limit == true) {
+            if ( new_line.chrom != options.limit_chr) {
+                getline( in, new_line.chrom ) ;
+                continue ;
+            }
+            if ( new_line.pos < options.limit_win_start) {
+                getline( in, new_line.chrom ) ;
+                continue ;
+            }
+            if ( new_line.pos > options.limit_win_end) {
+                break ;
+            }
+        }
         
+
         /// if two adjacent sites have the same positions, skip second
         if ( ( position.size() > 0 && new_line.pos == position.back() ) ) {
             getline( in, new_line.chrom ) ;
             continue ;
         }
-                        
+
         // read reference panel genotype counts
         new_line.reference_counts.resize( options.ancestry_proportion.size() ) ;
         int count = 0 ;
@@ -61,26 +82,35 @@ void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_informati
             new_line.sample_counts[m].push_back(count2) ;
             new_line.sample_counts[m].push_back(count1+count2) ;
         }
-        
+
         if ( new_line.chrom != last_chrom ) {
             recombination_rate.push_back( 0.5 ) ;
             last_chrom = new_line.chrom ;
-            extra_recombination = 0 ; 
+            extra_recombination = 0 ;
         }
 
         /// ignore lines where recombination may not be suffiicent to make sites independent
         /// this might be useful in place of LD pruning
         else {
-
             extra_recombination += new_line.recombination_rate ;
             if ( extra_recombination < options.minimum_distance ) {
                 continue ;
             }
             new_line.recombination_rate = extra_recombination ;
             extra_recombination = 0 ;
-        
-            recombination_rate.push_back( new_line.recombination_rate/ ( new_line.pos - position.back() ) ) ;
+
+            /// Changing recombination rate to no longer be specified per basepair. JS
+            recombination_rate.push_back( new_line.recombination_rate ) ;
+            /// recombination_rate.push_back( new_line.recombination_rate/ ( new_line.pos - position.back() ) ) ;
         }
+     
+        /// Determine position of selected site in output vector
+        if (options.is_limit == true) {
+            if (new_line.pos == options.sel_site) {
+                sel_pos = ipos ;
+            }
+        }
+        ipos++ ;
 
         /// record position
         position.push_back( new_line.pos ) ;

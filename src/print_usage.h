@@ -32,7 +32,12 @@ void print_usage() {
     cerr << "\t\t--output-ancestry\toutput ancestry posteriors rather than pulses" << endl ;
     cerr << "\t\t-r [int]\t\tnumber of random restarts during nelder-mead optimization" << endl ;
     cerr << "\t\t--pmax [int]\t\tmaximum proportion ancestry in an admixture pulse" << endl ;
-    cerr << "\t\t--pmin [int]\t\tminimum proportion ancestry in an admixture pulse" << endl ;
+    cerr << "\t\t--pmin [int]\t\tminimum proportion ancestry in an admixture pulse" << endl << endl;
+
+    /// Parameters for adaptive introgression
+    cerr << "\toptional and relevant only for detecting and quantifying selection:" << endl ;
+    cerr << "\t\t-j [string ] [int] [int] [int] ..." << endl ;
+    cerr << "\t\t\t chromosome name, start of window surrounding site, end of window and location of site of interest" << endl ;
     
 }
 

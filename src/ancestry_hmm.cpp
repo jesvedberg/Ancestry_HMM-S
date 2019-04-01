@@ -15,6 +15,9 @@
 #include <string>
 #include <fstream>
 #include <algorithm>
+#include <cmath>  // JS
+#include <cstring> // JS
+
 using namespace std ;
 
 /// linear algebra library is armadillo
@@ -57,7 +60,11 @@ using namespace arma ;
 #include "read_input.h"
 #include "nelder_mead.h"
 #include "golden_search.h"
-#include "bootstrap.h" 
+#include "bootstrap.h"
+
+#include "fwd_iter.h" // JS
+#include "selection_trajectory.h" // JS
+#include "split_vector.h" // JS
 
 int main ( int argc, char *argv[] ) {
     
@@ -97,8 +104,49 @@ int main ( int argc, char *argv[] ) {
     vector<int> position ;
     vector<double> recombination_rate ;
     vector<string> chromosomes ;
-    read_file( options, markov_chain_information, state_list, position, recombination_rate, chromosomes ) ;
-        
+    int sel_pos ;
+    read_file( options, markov_chain_information, state_list, position, recombination_rate, chromosomes, sel_pos ) ;
+
+    // TEST: print recombination rates
+    cerr << endl ;
+    for (int i = 0; i < recombination_rate.size(); i++) {
+        cerr << recombination_rate[i] << "\t" ;
+    }
+    cerr << endl << sel_pos << endl ;
+
+    // TEST: split recombination_rate vector into two parts
+    vector<double> vecf ;
+    vector<double> vecb ;
+    split_vector(sel_pos, recombination_rate, vecb, vecf) ;
+
+    // TEST: print splitted vectors
+    cerr << "forward vector" << endl ;
+    for (int i = 0; i < vecf.size(); i++) {
+        cerr << vecf[i] << "\t" ;
+    }
+    cerr << endl << "backward vector" << endl ;
+    for (int i = 0; i < vecb.size(); i++) {
+        cerr << vecb[i] << "\t" ;
+    }
+
+    /// TEST: Calculate expected transition rates for a selected locus. The recombination rate vector has been split at the site and the two resulting vectors of recombination rates are used to generate the transition rates
+    double m = 0.1 ;
+    int generations = 200 ;
+    int tt = 0;
+    int n = 1000 ;    
+    vector<double> sel_traject ;
+    selection_trajectory(sel_traject, tt, m, generations, n) ;
+    vector<vector<double>> fwd_trans = fwd_iter(vecf, sel_traject, tt, m, generations, n) ;
+    vector<vector<double>> back_trans = fwd_iter(vecb, sel_traject, tt, m, generations, n) ;
+    for (int i = 0; i < fwd_trans.size(); i++) {
+        cerr << endl << fwd_trans[i][0] << "\t" << fwd_trans[i][1] << "\t" << fwd_trans[i][2] << "\t" << fwd_trans[i][3] ;
+    }
+     for (int i = 0; i < back_trans.size(); i++) {
+        cerr << endl << back_trans[i][0] << "\t" << back_trans[i][1] << "\t" << back_trans[i][2] << "\t" << back_trans[i][3] ;
+    }
+
+    
+
     /// create basic transition information
     cerr << (double) (clock() - t) << " ms" << endl << "computing transition routes\t\t\t" ; t = clock() ;
     /// 3d map to look up by ploidy, start state, end state, and then relevant transition information
@@ -108,7 +156,9 @@ int main ( int argc, char *argv[] ) {
             create_transition_information( markov_chain_information.at(m).sample_ploidy_path[p].ploidy, transition_matrix_information, state_list[markov_chain_information.at(m).sample_ploidy_path[p].ploidy] ) ;
         }
     }
-    
+
+    ///
+
     /// create admixture model(s)
     cerr << (double) (clock() - t) << " ms" << endl << "creating initial admixture model(s)\t\t" ; t = clock();
     vector<vector<pulse> > vertices ;
