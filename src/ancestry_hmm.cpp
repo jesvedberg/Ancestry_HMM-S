@@ -17,6 +17,8 @@
 #include <algorithm>
 #include <cmath>  // JS
 #include <cstring> // JS
+#include <utility> // JS
+#include <iomanip> // JS
 
 using namespace std ;
 
@@ -35,6 +37,7 @@ using namespace arma ;
 #include "normalize.h"
 #include "ancestry_pulse.h"
 #include "ploidy_path.h" 
+#include "selection_class.h" // JS
 #include "markov_chain.h"
 #include "read_samples.h" 
 #include "pulses_to_ancestry.h" 
@@ -62,9 +65,15 @@ using namespace arma ;
 #include "golden_search.h"
 #include "bootstrap.h"
 
+#include "optimize_test_func.h" // Function for testing Nelder-Mead
 #include "fwd_iter.h" // JS
 #include "selection_trajectory.h" // JS
 #include "split_vector.h" // JS
+#include "selection_forward.h" // JS
+#include "selection_nelder_mead.h" // JS
+
+
+
 
 int main ( int argc, char *argv[] ) {
     
@@ -107,6 +116,7 @@ int main ( int argc, char *argv[] ) {
     int sel_pos ;
     read_file( options, markov_chain_information, state_list, position, recombination_rate, chromosomes, sel_pos ) ;
 
+/*
     // TEST: print recombination rates
     cerr << endl ;
     for (int i = 0; i < recombination_rate.size(); i++) {
@@ -144,7 +154,7 @@ int main ( int argc, char *argv[] ) {
      for (int i = 0; i < back_trans.size(); i++) {
         cerr << endl << back_trans[i][0] << "\t" << back_trans[i][1] << "\t" << back_trans[i][2] << "\t" << back_trans[i][3] ;
     }
-
+    */
     
 
     /// create basic transition information
@@ -156,9 +166,52 @@ int main ( int argc, char *argv[] ) {
             create_transition_information( markov_chain_information.at(m).sample_ploidy_path[p].ploidy, transition_matrix_information, state_list[markov_chain_information.at(m).sample_ploidy_path[p].ploidy] ) ;
         }
     }
+    cerr << "Test1." << endl;
 
-    ///
+    if (options.calc_grid == true) {
+        int p_start = options.grid_pstart;
+        int p_stop = options.grid_pstop;
+        int p_step = options.grid_pstep;
 
+        double s_start = options.grid_sstart;
+        double s_stop = options.grid_sstop;
+        double s_step = options.grid_sstep;
+
+        selection_grid(p_start, p_stop, p_step, s_start, s_stop, s_step, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list);
+        return 0;
+    }
+    if (options.test_point == true) {
+        cout << "Evaluating point: " << options.test_pos << ", " << options.test_sel << endl;
+        selection test_sel;
+        double lnl;
+        test_sel.pos = options.test_pos;
+        test_sel.sel = options.test_sel;
+        lnl = selection_evaluate_point(test_sel, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list);
+        cout << "lnL for a selected site s=" << test_sel.sel << " at position " << test_sel.pos << " is: " << lnl << endl;
+        return 0;
+    }
+
+    cerr << endl << "BP1: Before selection_evaluate_point." << endl;
+
+    cout << "Nelder-Mead optimization starting." << endl;
+
+    
+
+    if (options.is_limitpos == false) {
+        cout << "wtf" << endl;
+        options.pos_min = 0 + options.pos_margin;
+        options.pos_max = recombination_rate.size() - options.pos_margin;
+    }
+    cout << "Sequence length: " << options.pos_max << endl;
+    cout << "pos_min: " << options.pos_min << " pos_max: " << options.pos_max << endl;
+
+    selection optimum;
+    optimum =  selection_nelder_mead(options, markov_chain_information, transition_matrix_information, recombination_rate, position, state_list);
+
+    cout << "Optimum point. pos:" << optimum.pos << "  sel:" << optimum.sel << "  lnL: " << optimum.lnl << endl;
+    
+
+    /*
     /// create admixture model(s)
     cerr << (double) (clock() - t) << " ms" << endl << "creating initial admixture model(s)\t\t" ; t = clock();
     vector<vector<pulse> > vertices ;
@@ -277,7 +330,7 @@ int main ( int argc, char *argv[] ) {
         
     cerr << (double) (clock() - t) << " ms" << endl ;
     cerr << "total run time:\t\t\t" << (double) (clock() - total) << " ms" << endl ;
-
+*/
 	return 0 ; 
 }
 	

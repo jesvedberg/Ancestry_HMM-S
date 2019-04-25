@@ -79,6 +79,9 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
 
     // selection
     is_limit = false ;
+    calc_grid = false;
+    test_point = false;
+    is_limitpos = false;
     
 	/// accept command line parameters
 	for (int i=1; i<argc; i++) {
@@ -131,6 +134,14 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
             limit_win_start = atoi(argv[++i]) ;
             limit_win_end = atoi(argv[++i]) ;
             sel_site = atoi(argv[++i]) ;
+
+            // minimum and maximum limits for selective coeffient to be estimated
+            sel_max = 0.4;
+            sel_min = 0.001;
+            pos_margin = 0; //maybe set this to 1000??
+
+            sel_limit = 0.8;
+            pos_limit = 0.8;
 
             cerr << endl << limit_chr << "\t" << limit_win_start << "\t" << limit_win_end << "\t" << sel_site << endl ;
 
@@ -242,6 +253,34 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
         }
         if ( strcmp(argv[i],"--fix") == 0 ) {
             ancestral_fixed = true ;
+        }
+
+        if ( strcmp(argv[i],"--grid") == 0 ) {
+            calc_grid = true;
+            grid_pstart = atoi(argv[++i]);
+            grid_pstop = atoi(argv[++i]);
+            grid_pstep = atoi(argv[++i]);
+            grid_sstart = atof(argv[++i]);
+            grid_sstop = atof(argv[++i]);
+            grid_sstep = atof(argv[++i]);
+        }
+
+        if ( strcmp(argv[i],"--testsel") == 0 ) {
+            test_point = true;
+            test_pos = atoi(argv[++i]);
+            test_sel = atof(argv[++i]);
+        }
+
+        if ( strcmp(argv[i],"--limitsel") == 0 ) {
+            sel_min = atof(argv[++i]);
+            sel_max = atof(argv[++i]);
+        }
+
+        if ( strcmp(argv[i],"--limitpos") == 0 ) {
+            cout << "limitpos" << endl;
+            is_limitpos = true;
+            pos_min = atoi(argv[++i]);
+            pos_max = atoi(argv[++i]);
         }
     }
     

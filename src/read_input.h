@@ -15,7 +15,7 @@ void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_informati
     
     /// iterator to find selected_site
     int ipos = 0;
-
+    
     while( !in.eof() ) {
         
         input_line new_line ;
@@ -115,7 +115,7 @@ void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_informati
         /// record position
         position.push_back( new_line.pos ) ;
         chromosomes.push_back( new_line.chrom ) ;
-
+        
         /// check all path indexes and update as needed
         for ( int m = 0 ; m < markov_chain_information.size() ; m ++ ) {
             
@@ -140,7 +140,7 @@ void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_informati
                 }
             }
         }
-    
+        
         /// 
         if ( options.genotype == false ) {
             for ( int m = 0 ; m < markov_chain_information.size() ; m ++ ) {
@@ -159,6 +159,11 @@ void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_informati
             }
         }
     }
+
+    /// WARNING: may cause problems. Not sure what recombination_rate will be when analyzing multiple chromosomes.
+    //options.pos_min = 0 + options.pos_margin;
+    //options.pos_max = recombination_rate.size() - options.pos_margin;
+
     
     /// to avoid lookahead errors
     for ( int m = 0 ; m < markov_chain_information.size() ; m ++ ) {

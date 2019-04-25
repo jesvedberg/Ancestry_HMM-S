@@ -74,6 +74,26 @@ public:
     int limit_win_start ;
     int limit_win_end ;
     int sel_site ;
+    double sel_min;
+    double sel_max;
+    int pos_margin;
+    int pos_min;
+    int pos_max;
+    double pos_limit;
+    double sel_limit;
+    bool is_limitpos;
+
+    bool calc_grid;
+    int grid_pstart;
+    int grid_pstop;
+    int grid_pstep;
+    double grid_sstart;
+    double grid_sstop;
+    double grid_sstep;
+
+    bool test_point;
+    int test_pos;
+    double test_sel;
     
     /// read relevant information
     void read_cmd_line ( int argc, char *argv[] ) ;
