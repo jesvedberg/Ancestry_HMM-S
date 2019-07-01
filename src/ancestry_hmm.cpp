@@ -168,6 +168,7 @@ int main ( int argc, char *argv[] ) {
     }
     cerr << "Test1." << endl;
 
+    // If using grid search
     if (options.calc_grid == true) {
         int p_start = options.grid_pstart;
         int p_stop = options.grid_pstop;
@@ -180,13 +181,15 @@ int main ( int argc, char *argv[] ) {
         selection_grid(p_start, p_stop, p_step, s_start, s_stop, s_step, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list);
         return 0;
     }
+
+    // if testing a single point. Probably to be removed
     if (options.test_point == true) {
         cout << "Evaluating point: " << options.test_pos << ", " << options.test_sel << endl;
         selection test_sel;
         double lnl;
         test_sel.pos = options.test_pos;
         test_sel.sel = options.test_sel;
-        lnl = selection_evaluate_point(test_sel, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list);
+        lnl = selection_evaluate_point_genotypes(test_sel, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list);
         cout << "lnL for a selected site s=" << test_sel.sel << " at position " << test_sel.pos << " is: " << lnl << endl;
         return 0;
     }

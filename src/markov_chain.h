@@ -28,12 +28,22 @@ public:
     vector<vec> alphas ;
     double compute_forward_probabilities( map<int, vector<mat> > &transition_matrix, vector<mat> &interploidy_transitions  ) ;
 
+
+
+    /// For selection
+    //vector<double> genotype_freqs;
+
     double selection_forward_probabilities( map<int, vector<mat> > &transition_probabilites, vector<mat> &interploidy_transitions, selection &point, bool go_downstream  ) ;
 
-    void selection_forward_loop_reverse( map<int, vector<mat> > &transition_probabilites, vector<mat> &interploidy_transitions, selection &point, double &lnl, int ploidy_index) ;
+    void selection_forward_loop_reverse( map<int, vector<mat> > &transition_probabilites, vector<mat> &interploidy_transitions, selection &point, double &lnl, int ploidy_index, vector<int> &position) ;
     
-    void selection_forward_loop( map<int, vector<mat> > &transition_probabilites, vector<mat> &interploidy_transitions, selection &point, double &lnl, int ploidy_index) ;
+    void selection_forward_loop( map<int, vector<mat> > &transition_probabilites, vector<mat> &interploidy_transitions, selection &point, double &lnl, int ploidy_index, vector<int> &position) ;
+
+    double selection_forward_probabilities_genotypes( map<int, vector<mat> > &transition_probabilites, vector<mat> &interploidy_transitions, selection &point, bool go_downstream, vector<double> &genofreq , vector<int> &position) ;
     
+
+
+
     /// backward probs
     vector<vec> betas ;
     void compute_backward_probabilities( map<int, vector<mat> > &transition_matrix, vector<mat> &interploidy_transitions ) ;

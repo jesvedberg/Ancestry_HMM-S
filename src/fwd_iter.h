@@ -1,7 +1,11 @@
 #ifndef __FWD_ITER_H
 #define __FWD_ITER_H
 
-vector<mat> fwd_iter(vector<double> &recombination_rate, vector<double> &basefreq, int tt, double m, int generations, int n) 
+
+// forward iteration algoritm for calculating transition rates across a chromosome
+// takes vector of recombination rates (sites) and vector of allele frequency change of the selected site over time
+// uses the 2-site version with back coalescence.
+vector<mat> fwd_iter(vector<double> &recombination_rate, vector<double> &basefreq, double m, int n) 
 {
 
     vector<double> freq(basefreq) ;
@@ -38,7 +42,7 @@ vector<mat> fwd_iter(vector<double> &recombination_rate, vector<double> &basefre
 
         p_coal = 1 ;
 
-        for (int t = tt+1; t < tt + generations; t++) {
+        for ( int t = 0 ; t < basefreq.size()-1 ; t++ ) {
             a1 = h11 + h12;
             a1_ = h11 + h21;
 
@@ -69,38 +73,130 @@ vector<mat> fwd_iter(vector<double> &recombination_rate, vector<double> &basefre
             freq_[t+1] = (h11 + h21) ;
             p_coal *= ( 1 - 1/(2*n) ) ;
 
-            //cerr << freq[t] << "," << freq_[t] << " " ;
         }
-        //cerr << endl ;
-        /*cout << site << " " << setprecision(15) << h11 << " " << h12 << " " << h21 << " " << h22 << " ";
-        cout << h12/((h11+h12)*r) << " ";
-        cout << h21/((h21+h22)*r) << " ";
-        cout << h12/((h12+h22)*r) << " ";
-        cout << h21/((h21+h11)*r) << " " << endl;*/
-        //cerr << h12/((h11+h12)*r) << " ";
-        /*tr.push_back(h12/((h11+h12)*r)) ;
-        tr.push_back(h21/((h21+h22)*r)) ;
-        tr.push_back(h12/((h12+h22)*r)) ;
-        tr.push_back(h21/((h21+h11)*r)) ;*/
-        //cerr << h12/(h11+h12) << "\t" << h21/(h21+h22) << endl;
 
+        // matrix with transition rates
         tr_mat(0,0) = 1 - h12/(h11+h12);
         tr_mat(0,1) = h12/(h11+h12);
         tr_mat(1,0) = h21/(h21+h22);
         tr_mat(1,1) = 1 - h21/(h21+h22);
 
+        //cerr << tr_mat(0,0) << " " << tr_mat(0,1) << " " << tr_mat(1,0) << " " << tr_mat(1,1) << endl;
+
         transition_rates.push_back(tr_mat) ;
 
-        //cerr << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << endl;
-        //copy(begin(freq_), end(freq_), begin(freq));
-        //memcpy(freq, freq_, 300*sizeof(double));
         freq = freq_ ;
     }
 
     return transition_rates;
 }   
 
-mat iterate_site(mat &tr_mat, vector<double> &freqlist, double r, double site, double m, int tt, int generations) {
+// test. remove. version of function to print genotype frequency
+vector<mat> fwd_iter_genotype_freq(vector<double> &recombination_rate, vector<double> &basefreq, double m, int n, vector<int> &positions, vector<double> &genotype_freqs) 
+{
+
+    vector<double> freq(basefreq) ;
+    vector<double> freq_(basefreq);
+    vector<mat> transition_rates ;
+    double sum ;
+    double h11;
+    double h12;
+    double h21;
+    double h22;
+    double r;
+
+    double a1;
+    double a1_;
+
+    double h11_;
+    double h12_;
+    double h21_;
+    double h22_;
+
+    double p_coal;
+
+    //vector<double> genofreq;
+    int gfsite;
+    //genofreq = basefreq.back();
+    //cerr << "genofreq\t" << positions[0]  << "\t" << basefreq.back() << endl;
+    //cerr << "cp1 ";
+
+    for ( int site = 0 ; site < recombination_rate.size() ; site ++ ) {
+        //for (double site = 0; site < 0.5 ; site += r) {
+        r = recombination_rate[site] ;
+        //vector<double> tr ;
+        mat tr_mat(2,2);
+        //freq_[tt+1] = m ;
+
+        h11 = m;
+        h12 = 0;
+        h21 = 0;
+        h22 = 1-m;
+
+        p_coal = 1 ;
+        //cerr << "cp2 basefreq " << basefreq.size();
+        for ( int t = 0 ; t < basefreq.size()-1 ; t++ ) {
+            a1 = h11 + h12;
+            a1_ = h11 + h21;
+
+            h11_ = h11*(1-r) + a1*r*a1_*p_coal;
+            h12_ = h12*(1-r) + a1*r*(1-a1_)*p_coal;
+            h21_ = h21*(1-r) + (1-a1)*r*a1_*p_coal;
+            h22_ = h22*(1-r) + (1-a1)*r*(1-a1_)*p_coal;
+
+            freq_[t] = ( h11_ + h21_ )/( h11 + h12 + h21 + h22 );
+
+            h11 = h11_ ; 
+            h12 = h12_ ; 
+            h21 = h21_ ; 
+            h22 = h22_ ; 
+            
+            h11 = h11/freq[t]*freq[t+1]; 
+            h12 = h12/freq[t]*freq[t+1]; 
+    
+            h21 = h21/(1-freq[t])*(1-freq[t+1]); 
+            h22 = h22/(1-freq[t])*(1-freq[t+1]); 
+
+            sum = h11 + h12 + h21 + h22; 
+            h11 = h11/sum; 
+            h12 = h12/sum; 
+            h21 = h21/sum; 
+            h22 = h22/sum; 
+
+            freq_[t+1] = (h11 + h21) ;
+            p_coal *= ( 1 - 1/(2*n) ) ;
+
+        }
+
+        // matrix with transition rates
+        tr_mat(0,0) = 1 - h12/(h11+h12);
+        tr_mat(0,1) = h12/(h11+h12);
+        tr_mat(1,0) = h21/(h21+h22);
+        tr_mat(1,1) = 1 - h21/(h21+h22);
+
+        //cerr << tr_mat(0,0) << " " << tr_mat(0,1) << " " << tr_mat(1,0) << " " << tr_mat(1,1) << endl;
+        //cerr << "genofreq\t" << positions[site]  << "\t" << genofreq << endl;
+        //genofreq = genofreq * (1 + tr_mat(1,0) - tr_mat(0,1));
+        //gfsite = site;
+
+        //cerr << " cp3 ";
+        genotype_freqs.push_back(freq_.back());
+        //cerr << "cp4 ";
+        //cerr << "genofreq\t" << positions[site] << "\t" << freq_.back() << endl;
+        //cerr << "cp5 ";
+        transition_rates.push_back(tr_mat) ;
+
+        freq = freq_ ;
+    }
+    //cerr << "genofreq\t" << positions[gfsite]  << "\t" << genofreq << endl;
+
+    return transition_rates;
+}   
+
+// forward iteration algoritm for calculating transition rates across a chromosome
+// 3-site version. Is called from fwd_curve() and only calculates a single site
+// takes a distance from the selected site and a vector of allele frequency at the selected site over time
+mat iterate_site(mat &tr_mat, vector<double> &freqlist, double r, double site, double m) {
     double h111 = m;
     double h112 = 0;
     double h121 = 0;
@@ -124,7 +220,7 @@ mat iterate_site(mat &tr_mat, vector<double> &freqlist, double r, double site, d
     double h222_;
     double summ;
 
-    for (int t = tt+1; t < tt + generations; t++) {
+    for (int t = 0; t < freqlist.size()-1; t++) {
         /// get marginal haplotype frequencies
         /// Haplotype = specific combination of alleles at the two neighboring sites
         m11 = h111 + h211;
@@ -195,12 +291,16 @@ mat iterate_site(mat &tr_mat, vector<double> &freqlist, double r, double site, d
     tr_mat(1,0) = (h121+h221)/(h121+h122+h221+h222);
     tr_mat(1,1) = 1 - (h121+h221)/(h121+h122+h221+h222);
 
-    cerr << site << "\t" << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << "\t" << tr_mat(0,1)/r << "\t" << tr_mat(1,0)/r << endl;
+    //cerr << site << "\t" << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << "\t" << tr_mat(0,1)/r << "\t" << tr_mat(1,0)/r << endl;
 
     return tr_mat;
 }
 
-vector<mat> fwd_curve(vector<double> &recombination_rate, vector<double> &basefreq, int tt, double m, int generations) {
+// forward iteration algoritm for calculating transition rates across a chromosome
+// 3-site version. Loops over vector of recombination distances and calles iterate_site()
+// to calculate the transition rate at each site.
+// Not used at the moment.
+vector<mat> fwd_curve(vector<double> &recombination_rate, vector<double> &basefreq, double m) {
     vector<mat> transition_rates ;
     double r;
     mat tr_mat(2,2);
@@ -208,7 +308,7 @@ vector<mat> fwd_curve(vector<double> &recombination_rate, vector<double> &basefr
 
     for ( int site = 0 ; site < recombination_rate.size() ; site ++ ) {
         r = recombination_rate[site] ;
-        iterate_site(tr_mat, basefreq, r, cumulative_r, m, tt, generations);
+        iterate_site(tr_mat, basefreq, r, cumulative_r, m);
         transition_rates.push_back(tr_mat) ;
         cumulative_r = cumulative_r + r;
     }
@@ -216,6 +316,8 @@ vector<mat> fwd_curve(vector<double> &recombination_rate, vector<double> &basefr
     return transition_rates;
 }
 
+// Vladimir's approximative algorithm for calculating transition rates.
+// Not used at the moment, since it requires constant recombinational distances between the sites.
 vector<mat> approx_curve(vector<double> &recombination_rate, vector<double> &basefreq, int tt, double m, int generations) {
     mat V1_mat(2,2);
     mat V2_mat(2,2);
@@ -233,16 +335,19 @@ vector<mat> approx_curve(vector<double> &recombination_rate, vector<double> &bas
     double x1 = 0.01;
     double x2 = 0.1;
     
-    iterate_site(V1_mat, basefreq, r_est, x1, m, tt, generations);
-    iterate_site(V2_mat, basefreq, r_est, x2, m, tt, generations);
-    iterate_site(M_mat, basefreq, r_est, 2, m, tt, generations);
-    iterate_site(U_mat, basefreq, r_est, 0, m, tt, generations);
+    // generates 4 anchor points to generate curlve
+    iterate_site(V1_mat, basefreq, r_est, x1, m);
+    iterate_site(V2_mat, basefreq, r_est, x2, m);
+    iterate_site(M_mat, basefreq, r_est, 2, m);
+    iterate_site(U_mat, basefreq, r_est, 0, m);
 
+    // for selected allele
     L1_sel = log((V1_mat(0,1)-M_mat(0,1))/(U_mat(0,1)-M_mat(0,1)));
     L2_sel = log((V2_mat(0,1)-M_mat(0,1))/(U_mat(0,1)-M_mat(0,1)));
     p_sel = log(L1_sel/L2_sel)/log(x1/x2);
     alpha_sel = -L1_sel/pow(x1,p_sel);
 
+    // for non-selected allele
     L1_non = log((V1_mat(1,0)-M_mat(1,0))/(U_mat(1,0)-M_mat(1,0)));
     L2_non = log((V2_mat(1,0)-M_mat(1,0))/(U_mat(1,0)-M_mat(1,0)));
     p_non = log(L1_non/L2_non)/log(x1/x2);
@@ -256,6 +361,7 @@ vector<mat> approx_curve(vector<double> &recombination_rate, vector<double> &bas
     double sel_trans;
     double non_trans;
 
+    // loops over each site and calculates the transition rates
     for ( int site = 0 ; site < recombination_rate.size() ; site ++ ) {
         r = recombination_rate[site] ;
         //r=0.0001;
