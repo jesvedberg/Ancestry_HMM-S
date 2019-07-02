@@ -73,7 +73,7 @@ public:
     string limit_chr ;
     int limit_win_start ;
     int limit_win_end ;
-    int sel_site ;
+    //int sel_site ;
     double sel_min;
     double sel_max;
     int pos_margin;

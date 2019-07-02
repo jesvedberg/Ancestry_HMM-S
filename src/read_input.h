@@ -105,11 +105,11 @@ void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_informati
         }
      
         /// Determine position of selected site in output vector
-        if (options.is_limit == true) {
+        /*if (options.is_limit == true) {
             if (new_line.pos == options.sel_site) {
                 sel_pos = ipos ;
             }
-        }
+        } */
         ipos++ ;
 
         /// record position

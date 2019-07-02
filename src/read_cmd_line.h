@@ -136,7 +136,7 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
             limit_chr = string(argv[++i]) ;
             limit_win_start = atoi(argv[++i]) ;
             limit_win_end = atoi(argv[++i]) ;
-            sel_site = atoi(argv[++i]) ;
+            //sel_site = atoi(argv[++i]) ;
 
             // minimum and maximum limits for selective coeffient to be estimated
             sel_max = 0.4;
@@ -146,11 +146,11 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
             sel_limit = 0.8;
             pos_limit = 0.8;
 
-            cerr << endl << limit_chr << "\t" << limit_win_start << "\t" << limit_win_end << "\t" << sel_site << endl ;
+            cerr << endl << limit_chr << "\t" << limit_win_start << "\t" << limit_win_end << "\t" << endl ;
 
             /// check if win_start < win_end and site is located within window
-            if ( limit_win_end < limit_win_start || limit_win_end < sel_site || sel_site < limit_win_start ) {
-                cerr << "\n\n\t\t ERROR: formatting for selected site and window is wrong\n\n" ;
+            if ( limit_win_end <= limit_win_start ) {
+                cerr << "\n\n\t\t ERROR: formatting for window is wrong\n\n" ;
                 print_usage() ;
                 exit(1) ;
             }
