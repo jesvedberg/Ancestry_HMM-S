@@ -94,6 +94,12 @@ public:
     bool test_point;
     int test_pos;
     double test_sel;
+
+    // HMM chain window size
+    string win_unit;
+    double win_morgan;
+    double win_percent;
+    // int win_bp;
     
     /// read relevant information
     void read_cmd_line ( int argc, char *argv[] ) ;

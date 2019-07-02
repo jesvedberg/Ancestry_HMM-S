@@ -82,6 +82,9 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
     calc_grid = false;
     test_point = false;
     is_limitpos = false;
+
+    win_unit = "m"; // set default window size unit to morgans
+    win_morgan = 0.1; // default window size in morgans
     
 	/// accept command line parameters
 	for (int i=1; i<argc; i++) {
@@ -281,6 +284,26 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
             is_limitpos = true;
             pos_min = atoi(argv[++i]);
             pos_max = atoi(argv[++i]);
+        }
+
+        // control window size for selection
+        if ( strcmp(argv[i],"--window") == 0 ) {
+            win_unit = argv[++i];
+
+            if ( win_unit = "m") {
+                win_morgan = atof(argv[++i]);
+            }
+            else if (win_unit = "p") {
+                win_percent = atof(argv[++i]);
+            }
+            /*else if (win_unit = "b") {
+                win_bp = atoi(argv[++i]);
+            } */
+            else {
+                cerr << "\n\n\t\tERROR: wrong unit for window size.\n\n" ;
+                print_usage() ;
+                exit(1) ;
+            }
         }
     }
     

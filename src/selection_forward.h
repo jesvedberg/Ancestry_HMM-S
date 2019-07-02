@@ -1,6 +1,7 @@
 #ifndef __SELECTION_FORWARD_H
 #define __SELECTION_FORWARD_H
 
+// Depricated???
 // Forward algoritm modified for selection inferrence.
 double markov_chain::selection_forward_probabilities( map<int, vector<mat> > &transition_probabilites, vector<mat> &interploidy_transitions, selection &point, bool go_downstream  ) {
         
