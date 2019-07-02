@@ -95,7 +95,7 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
 
     vector<double> vecf ;
     vector<double> vecb ;
-    split_vector(point.pos, recombination_rate, vecb, vecf) ;
+    split_vector(point.pos, recombination_rate, vecb, vecf, cmd_line &options) ;
 
     cerr << "strg1: after vecf, recombination_rate.size()  " << recombination_rate.size() << endl;
 
