@@ -288,12 +288,12 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
 
         // control window size for selection
         if ( strcmp(argv[i],"--window") == 0 ) {
-            win_unit = argv[++i];
+            win_unit = string(argv[++i]);
 
-            if ( win_unit = "m") {
+            if ( win_unit == "m") {
                 win_morgan = atof(argv[++i]);
             }
-            else if (win_unit = "p") {
+            else if (win_unit == "p") {
                 win_percent = atof(argv[++i]);
             }
             /*else if (win_unit = "b") {

@@ -99,9 +99,9 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
 
     cerr << "strg1: after vecf, recombination_rate.size()  " << recombination_rate.size() << endl;
 
-    vector<int> posvecf ;
-    vector<int> posvecb ;
-    split_vector_int(point.pos, position, posvecb, posvecf) ;
+    //vector<int> posvecf ;
+    //vector<int> posvecb ;
+    //split_vector_int(point.pos, position, posvecb, posvecf) ;
 
     cerr << "strg2: after posvecf  ";
 
@@ -137,9 +137,9 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
 
 
     cerr << "fwd_vector" << endl;
-    vector<mat> fwd_trans = fwd_iter_genotype_freq(vecf, sel_traject, m, options.ne, posvecf, genofreqs[0]) ; //options.ne
+    vector<mat> fwd_trans = fwd_iter_genotype_freq(vecf, sel_traject, m, options.ne, genofreqs[0]) ; //options.ne
     //cerr << endl << "back_vector" << endl;
-    vector<mat> back_trans = fwd_iter_genotype_freq(vecb, sel_traject, m, options.ne, posvecb, genofreqs[1]) ;
+    vector<mat> back_trans = fwd_iter_genotype_freq(vecb, sel_traject, m, options.ne, genofreqs[1]) ;
 
     cerr << "strg4: genofreq  " << genofreqs.size() << "gf1 " << genofreqs[0].size() << endl;
 

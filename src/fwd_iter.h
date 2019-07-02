@@ -92,7 +92,7 @@ vector<mat> fwd_iter(vector<double> &recombination_rate, vector<double> &basefre
 }   
 
 // test. remove. version of function to print genotype frequency
-vector<mat> fwd_iter_genotype_freq(vector<double> &recombination_rate, vector<double> &basefreq, double m, int n, vector<int> &positions, vector<double> &genotype_freqs) 
+vector<mat> fwd_iter_genotype_freq(vector<double> &recombination_rate, vector<double> &basefreq, double m, int n, vector<double> &genotype_freqs) 
 {
 
     vector<double> freq(basefreq) ;
