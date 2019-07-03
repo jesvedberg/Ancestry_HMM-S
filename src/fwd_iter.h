@@ -179,11 +179,8 @@ vector<mat> fwd_iter_genotype_freq(vector<double> &recombination_rate, vector<do
         //genofreq = genofreq * (1 + tr_mat(1,0) - tr_mat(0,1));
         //gfsite = site;
 
-        //cerr << " cp3 ";
-        genotype_freqs.push_back(freq_.back());
-        //cerr << "cp4 ";
-        //cerr << "genofreq\t" << positions[site] << "\t" << freq_.back() << endl;
-        //cerr << "cp5 ";
+        genotype_freqs.push_back(freq_.back()); // For outputting genotype frequencies. Maybe remove???
+        
         transition_rates.push_back(tr_mat) ;
 
         freq = freq_ ;

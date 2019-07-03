@@ -58,6 +58,8 @@ void split_vector(int sel_site, vector<double> &whole_vec, vector<double> &back_
         }
 
     }
+
+    //cout << "Split vector lengths: " << fwd_vec.size() << ", " << back_vec.size() << endl;
 }
 
 /*

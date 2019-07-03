@@ -21,11 +21,12 @@ void selection_transition_matrix(map<int,vector<mat> > &transition_matrix , vect
     if ( transition_matrix.find( number_chromosomes ) != transition_matrix.end() ) {
         return ;
     }
-    cerr << "BP3.1" << endl;
+    
     /// else, have to create entire matrix
     /// first create data object of approporate size
-    transition_matrix[number_chromosomes].resize(recombination_rate.size()) ;
-    //cerr << "BP3.2" << endl;
+    //transition_matrix[number_chromosomes].resize(recombination_rate.size()) ;
+    transition_matrix[number_chromosomes].resize(transition_rates.size()) ;
+    
     //// iterate across all positions and compute transition matrixes
     for ( int p = 0 ; p < transition_rates.size() ; p ++ ) {
 
@@ -155,10 +156,6 @@ double selection_evaluate_point(selection &point, vector<markov_chain> &markov_c
     vector<vector<mat>> t_rates = selection_transition_rates(point, recombination_rate, options);
     //vector<vector<mat>> t_rates = selection_transition_rates_genotypes(point, recombination_rate, options, position); // test. remove
     
-    /*for (int i = 0; i < t_rates[0].size(); i++) {
-        cerr << t_rates[0][i] << endl;
-    }*/
-
     cerr << "BP3: After transition rates." << endl;
     
     double comb_lnl = 0;
@@ -185,10 +182,6 @@ double selection_evaluate_point(selection &point, vector<markov_chain> &markov_c
         cerr << "markov_chain_information.size()  " << markov_chain_information.size() << endl;
         for ( int m = 0 ; m < markov_chain_information.size() ; m ++ ) {
             //cerr << "Sample#: " << m << endl;
-            /*for (int j = 0; j < markov_chain_information[m].emission_probabilities.size();j++) {
-                cerr << "markov_chain_information: " << markov_chain_information[m].emission_probabilities[j] << endl;
-            }
-            continue;*/
             lnl += markov_chain_information[m].selection_forward_probabilities( transition_matrix, interploidy_transitions, point, go_backwards ) ;
         }
         cerr << "BP5: After compute forward. " << i << " " << lnl << endl;
@@ -199,13 +192,13 @@ double selection_evaluate_point(selection &point, vector<markov_chain> &markov_c
     return comb_lnl ;
     // forward probabilities
     // other probabilities ??
-}
+} 
 
-double selection_evaluate_point_genotypes(selection &point, vector<markov_chain> &markov_chain_information, map<int, vector<vector< map< vector<transition_information>, double > > > > &transition_matrix_information, vector<double> &recombination_rate, vector<int> &position, cmd_line &options, map<int,vector<vector<int> > > &state_changes ) {
+double selection_evaluate_point_genotypes(selection &point, vector<markov_chain> &markov_chain_information, map<int, vector<vector< map< vector<transition_information>, double > > > > &transition_matrix_information, vector<double> &recombination_rate, vector<int> &position, cmd_line &options, map<int,vector<vector<int> > > &state_changes, vector < vector<double> > &genofreqs ) {
     cerr << "BP2: Before transition rates." << endl;
     //vector<vector<mat>> t_rates = selection_transition_rates(point, recombination_rate, options);
 
-    vector < vector<double> > genofreqs ;
+    //vector < vector<double> > genofreqs ;
     
     vector<vector<mat>> t_rates = selection_transition_rates_genotypes(point, recombination_rate, options, position, genofreqs); // test. remove
     
@@ -229,7 +222,7 @@ double selection_evaluate_point_genotypes(selection &point, vector<markov_chain>
                 selection_transition_matrix( transition_matrix, transition_matrix_information[markov_chain_information[m].ploidy_switch[p]], recombination_rate, position, markov_chain_information[m].ploidy_switch[p], t_rates[i] ) ;
             }
         }
-        cerr << "BP4: After transition matrix." << endl;
+        cerr << "tr_matrix: " << transition_matrix.size() << endl;
         /// compute transitions within a state
         vector<mat> interploidy_transitions ;
         //interploidy_transitions = create_interploidy_transitions( state_changes, vertex, options.ancestry_proportion ) ;

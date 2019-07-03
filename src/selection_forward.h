@@ -62,7 +62,7 @@ double markov_chain::selection_forward_probabilities_genotypes( map<int, vector<
     // WARNING. Hardcoded for diploid data. Change
     alphas[0] = {genofreq[0]*genofreq[0], 2*genofreq[0]*(1-genofreq[0]), (1-genofreq[0])*(1-genofreq[0])};
 
-    //cerr << "cp2_3 " << endl;
+    //cerr << "cp2_3 " << go_downstream <<endl;
 
     lnl += normalize( alphas[0] ) ;
     //cerr << "BEFORE: lnL: " << lnl <<  "  " << alphas[0] <<  "  " << alphas.size() <<  "  " << alphas[0].size() << endl;
@@ -77,7 +77,7 @@ double markov_chain::selection_forward_probabilities_genotypes( map<int, vector<
         //cerr << "fwdloop" << endl;
         selection_forward_loop(transition_probabilites, interploidy_transitions, point, lnl, ploidy_index, position) ;
     }
-    //cerr << "BP4.2: selection forward 2." << endl;
+    
     return lnl ;
 }
 
@@ -87,9 +87,12 @@ void markov_chain::selection_forward_loop( map<int, vector<mat> > &transition_pr
     //cerr << "Emission probabilities: " << emission_probabilities.size() << " " << point.pos << endl;
 
     int j = 1;
+    int k;
     double normalpha;
+    //cerr << "1n_cols: " <<  transition_probabilites[ploidy_switch[ploidy_index]].size() << endl;
 
-    for ( int i = point.pos+1 ; i < emission_probabilities.size() ; i ++ ) {
+    for ( int i = 1 ; i < transition_probabilites[ploidy_switch[ploidy_index]].size() ; i ++ ) {
+        k = point.pos + i;
         //cerr << "fwdloop1" << endl;
         /// if we're at or past the next switch position
         bool ploidy_change = false ;
@@ -101,7 +104,7 @@ void markov_chain::selection_forward_loop( map<int, vector<mat> > &transition_pr
         }*/
         /// resize matrix
         alphas[j].resize( transition_probabilites[ploidy_switch[ploidy_index]][1].n_cols ) ;
-        //cerr << "n_cols: " << transition_probabilites[ploidy_switch[ploidy_index]].size() << endl;
+        //cerr << "n_cols: " << i << " " << transition_probabilites[ploidy_switch[ploidy_index]].size() << endl;
         
         /// requires slightly different math if we are transitioning in ploidy between two adjacent sites
         if ( ploidy_change == true ) {
@@ -112,7 +115,7 @@ void markov_chain::selection_forward_loop( map<int, vector<mat> > &transition_pr
             
             //// otherwise, this is a transition across ploidy types on the same chromosome use the interploidy transition rates
             else {
-                alphas[j] = interploidy_transitions[ploidy_switch[ploidy_index-1]-1] * alphas[j-1] % emission_probabilities[i] ;
+                alphas[j] = interploidy_transitions[ploidy_switch[ploidy_index-1]-1] * alphas[j-1] % emission_probabilities[k] ;
             }
         }
         
@@ -122,7 +125,7 @@ void markov_chain::selection_forward_loop( map<int, vector<mat> > &transition_pr
             //alphas[j] = transition_probabilites[ploidy_switch[ploidy_index]][j] * alphas[j-1] % emission_probabilities[i] ;
             //alphas[j] = transition_probabilites[ploidy_switch[ploidy_index]][j] * alphas[j-1];
             //cerr << "decode_geno\t" << position[i] << "\t" << alphas[j][0]+alphas[j][1]*0.5 << endl;
-            alphas[j] = transition_probabilites[ploidy_switch[ploidy_index]][j] * alphas[j-1] % emission_probabilities[i] ;
+            alphas[j] = transition_probabilites[ploidy_switch[ploidy_index]][j] * alphas[j-1] % emission_probabilities[k] ;
             normalpha = normalize( alphas[j] ) ;
         }
 
@@ -141,9 +144,11 @@ void markov_chain::selection_forward_loop_reverse( map<int, vector<mat> > &trans
     //cerr << "Emission probabilities: " << emission_probabilities.size() << " " << point.pos << endl;
 
     int j = 1;
+    int k;
     double normalpha;
 
-    for ( int i = point.pos-1 ; i > 0 ; i -- ) {
+    for ( int i = 0 ; i < transition_probabilites[ploidy_switch[ploidy_index]].size()-1 ; i ++ ) {
+        k = point.pos - i;
         //cerr << "revloop1" << endl;
         /// if we're at or past the next switch position
         bool ploidy_change = false ;
@@ -155,7 +160,7 @@ void markov_chain::selection_forward_loop_reverse( map<int, vector<mat> > &trans
         }*/
         /// resize matrix
         alphas[j].resize( transition_probabilites[ploidy_switch[ploidy_index]][1].n_cols ) ;
-        //cerr << "n_cols: " << transition_probabilites[ploidy_switch[ploidy_index]].size() << endl;
+        //cerr << "back_n_cols: " << transition_probabilites[ploidy_switch[ploidy_index]].size() << endl;
         
         /// requires slightly different math if we are transitioning in ploidy between two adjacent sites
         if ( ploidy_change == true ) {
@@ -166,7 +171,7 @@ void markov_chain::selection_forward_loop_reverse( map<int, vector<mat> > &trans
             
             //// otherwise, this is a transition across ploidy types on the same chromosome use the interploidy transition rates
             else {
-                alphas[j] = interploidy_transitions[ploidy_switch[ploidy_index-1]-1] * alphas[j-1] % emission_probabilities[i] ;
+                alphas[j] = interploidy_transitions[ploidy_switch[ploidy_index-1]-1] * alphas[j-1] % emission_probabilities[k] ;
             }
         }
         
@@ -174,8 +179,8 @@ void markov_chain::selection_forward_loop_reverse( map<int, vector<mat> > &trans
         else {
             //alphas[j] = transition_probabilites[ploidy_switch[ploidy_index]][j] * alphas[j-1] % emission_probabilities[i] ;
             //alphas[j] = transition_probabilites[ploidy_switch[ploidy_index]][j] * alphas[j-1];
-            //cerr << "decode_geno\t" << position[i] << "\t" << alphas[j][0]+alphas[j][1]*0.5 << endl;
-            alphas[j] = transition_probabilites[ploidy_switch[ploidy_index]][j] * alphas[j-1] % emission_probabilities[i] ;
+            //cerr << "back_decode_geno\t" << i << "\t" << j << "\t" << k << "\t" << position[k] << "\t" << alphas[j][0]+alphas[j][1]*0.5 << endl;
+            alphas[j] = transition_probabilites[ploidy_switch[ploidy_index]][j] * alphas[j-1] % emission_probabilities[k] ;
             normalpha = normalize( alphas[j] ) ;
         }
 
