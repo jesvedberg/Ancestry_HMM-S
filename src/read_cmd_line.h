@@ -83,8 +83,9 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
     test_point = false;
     is_limitpos = false;
 
-    win_unit = "m"; // set default window size unit to morgans
-    win_morgan = 0.1; // default window size in morgans
+    win_unit = "p"; // set default window size unit to percent
+    win_percent = 100; // default window size in percent
+    //win_morgan = 0.1; // default window size in morgans
     
 	/// accept command line parameters
 	for (int i=1; i<argc; i++) {

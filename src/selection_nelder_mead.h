@@ -52,7 +52,7 @@ void selection_transition_matrix(map<int,vector<mat> > &transition_matrix , vect
 vector<vector<mat>> selection_transition_rates(selection point, vector<double> &recombination_rate, cmd_line &options) {
     vector<double> vecf ;
     vector<double> vecb ;
-    split_vector(point.pos, recombination_rate, vecb, vecf) ;
+    split_vector(point.pos, recombination_rate, vecb, vecf, options) ;
 
     double m = options.ancestry_pulses[1].proportion;
     int generations = options.ancestry_pulses[1].time ;
@@ -95,7 +95,7 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
 
     vector<double> vecf ;
     vector<double> vecb ;
-    split_vector(point.pos, recombination_rate, vecb, vecf, cmd_line &options) ;
+    split_vector(point.pos, recombination_rate, vecb, vecf, options) ;
 
     cerr << "strg1: after vecf, recombination_rate.size()  " << recombination_rate.size() << endl;
 
