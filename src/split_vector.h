@@ -16,8 +16,11 @@ int int_min(int a, int b){
     return minout;
 }
 
-void split_vector(int sel_site, vector<double> &whole_vec, vector<double> &back_vec, vector<double> &fwd_vec, cmd_line &options) 
+vector <vector<double>> split_vector(int sel_site, vector<double> &whole_vec, cmd_line &options) 
 {
+    vector <vector<double>> split_vecs;
+    vector<double> fwd_vec;
+    vector<double> back_vec;
 
     // trim vector if size is specified in morgans
     if (options.win_unit == "m") {
@@ -59,6 +62,9 @@ void split_vector(int sel_site, vector<double> &whole_vec, vector<double> &back_
 
     }
 
+    split_vecs.push_back(fwd_vec);
+    split_vecs.push_back(back_vec);
+    return split_vecs;
     //cout << "Split vector lengths: " << fwd_vec.size() << ", " << back_vec.size() << endl;
 }
 

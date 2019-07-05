@@ -95,6 +95,13 @@ public:
     int test_pos;
     double test_sel;
 
+    int gs_pstart;
+    int gs_pstop;
+    int gs_pstep;
+    double gs_sstart;
+    double gs_sstop;
+
+
     // HMM chain window size
     string win_unit;
     double win_morgan;

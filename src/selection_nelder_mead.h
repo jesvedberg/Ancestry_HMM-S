@@ -53,7 +53,7 @@ void selection_transition_matrix(map<int,vector<mat> > &transition_matrix , vect
 vector<vector<mat>> selection_transition_rates(selection point, vector<double> &recombination_rate, cmd_line &options) {
     vector<double> vecf ;
     vector<double> vecb ;
-    split_vector(point.pos, recombination_rate, vecb, vecf, options) ;
+    //split_vector(point.pos, recombination_rate, vecb, vecf, options) ;
 
     double m = options.ancestry_pulses[1].proportion;
     int generations = options.ancestry_pulses[1].time ;
@@ -89,14 +89,16 @@ vector<vector<mat>> selection_transition_rates(selection point, vector<double> &
 }
 
 // as above, but to use when printing expected genotype frequences across the chromosome
-vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector<double> &recombination_rate, cmd_line &options, vector<int> &position, vector < vector<double> > &genofreqs) {
+vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector<double> &recombination_rate, cmd_line &options, vector<int> &position, vector < vector<double> > &genofreqs, vector <vector<double>> &split_vecs, map <double,vector<double>> &sel_trajectories) {
     point.sel = 0.5 * point.sel;
 
     cerr << "strg0: point " << point.pos << "  " << point.sel << endl;
 
-    vector<double> vecf ;
-    vector<double> vecb ;
-    split_vector(point.pos, recombination_rate, vecb, vecf, options) ;
+    //vector<double> vecf ;
+    //vector<double> vecb ;
+    if (split_vecs.size() == 0) {
+        split_vecs = split_vector(point.pos, recombination_rate, options) ;
+    }
 
     cerr << "strg1: after vecf, recombination_rate.size()  " << recombination_rate.size() << endl;
 
@@ -115,7 +117,16 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
 
     // generates vector with allele frequencies of selected allele over time
     vector<double> sel_traject ;
-    selection_trajectory(sel_traject, point.sel, tt, m, generations, n) ; // change tt
+    map <double,vector<double>>::iterator it;
+    it = sel_trajectories.find(point.sel);
+
+    if (it == sel_trajectories.end()) {
+        selection_trajectory(sel_traject, point.sel, tt, m, generations, n) ; // change tt
+        sel_trajectories[point.sel] = sel_traject;
+    }
+    else {
+        sel_traject = it->second;
+    }
     
     cerr << "strg3: after selection_trajectory  " << endl;
 
@@ -138,9 +149,9 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
 
 
     cerr << "fwd_vector" << endl;
-    vector<mat> fwd_trans = fwd_iter_genotype_freq(vecf, sel_traject, m, options.ne, genofreqs[0]) ; //options.ne
+    vector<mat> fwd_trans = fwd_iter_genotype_freq(split_vecs[0], sel_traject, m, options.ne, genofreqs[0]) ; //options.ne
     //cerr << endl << "back_vector" << endl;
-    vector<mat> back_trans = fwd_iter_genotype_freq(vecb, sel_traject, m, options.ne, genofreqs[1]) ;
+    vector<mat> back_trans = fwd_iter_genotype_freq(split_vecs[1], sel_traject, m, options.ne, genofreqs[1]) ;
 
     cerr << "strg4: genofreq  " << genofreqs.size() << "gf1 " << genofreqs[0].size() << endl;
 
@@ -194,13 +205,13 @@ double selection_evaluate_point(selection &point, vector<markov_chain> &markov_c
     // other probabilities ??
 } 
 
-double selection_evaluate_point_genotypes(selection &point, vector<markov_chain> &markov_chain_information, map<int, vector<vector< map< vector<transition_information>, double > > > > &transition_matrix_information, vector<double> &recombination_rate, vector<int> &position, cmd_line &options, map<int,vector<vector<int> > > &state_changes, vector < vector<double> > &genofreqs ) {
+double selection_evaluate_point_genotypes(selection &point, vector<markov_chain> &markov_chain_information, map<int, vector<vector< map< vector<transition_information>, double > > > > &transition_matrix_information, vector<double> &recombination_rate, vector<int> &position, cmd_line &options, map<int,vector<vector<int> > > &state_changes, vector <vector<double>> &split_vecs, map <double,vector<double>> &sel_trajectories) {
     cerr << "BP2: Before transition rates." << endl;
     //vector<vector<mat>> t_rates = selection_transition_rates(point, recombination_rate, options);
 
-    //vector < vector<double> > genofreqs ;
+    vector < vector<double> > genofreqs ;
     
-    vector<vector<mat>> t_rates = selection_transition_rates_genotypes(point, recombination_rate, options, position, genofreqs); // test. remove
+    vector<vector<mat>> t_rates = selection_transition_rates_genotypes(point, recombination_rate, options, position, genofreqs, split_vecs, sel_trajectories); // test. remove
     
     /*for (int i = 0; i < t_rates[0].size(); i++) {
         cerr << t_rates[0][i] << endl;
@@ -489,23 +500,34 @@ selection selection_nelder_mead(cmd_line &options, vector<markov_chain> &markov_
 // function for calculating likelihoods in a grid
 // takes start, stop and step values for selection and position
 void selection_grid(int p_start, int p_stop, int p_step, double s_start, double s_stop, double s_step, vector<markov_chain> &markov_chain_information, map<int, vector<vector< map< vector<transition_information>, double > > > > &transition_matrix_information, vector<double> &recombination_rate, vector<int> &position, cmd_line &options, map<int,vector<vector<int> > > &state_changes ) {
+
+    map <double,vector<double>> sel_trajectories;
+
     for (int p = p_start; p < p_stop; p+=p_step) {
         
+        vector <vector<double>> split_vecs;
+
         // generate neutral transition rate for normalization / calculating likelihood ratio
         selection point0;
         point0.pos = p;
         point0.sel = 0;
-        selection_evaluate_point_genotypes( point0, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes ) ;
+        selection_evaluate_point_genotypes( point0, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
         //cout << "point0: " << point0.pos << "\t" << point0.sel << "\t" << setprecision(12) << point0.lnl << endl;
 
         for (double s = s_start; s < s_stop; s=s+s_step) {
             selection point;
             point.pos = p;
             point.sel = s;
-            selection_evaluate_point_genotypes( point, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes ) ;
+            selection_evaluate_point_genotypes( point, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
             cout << position[point.pos] << "\t" << point.sel << "\t" << setprecision(12) << point.lnl-point0.lnl << endl;
         }
     }
+}
+
+void selection_golden_section(vector<markov_chain> &markov_chain_information, map<int, vector<vector< map< vector<transition_information>, double > > > > &transition_matrix_information, vector<double> &recombination_rate, vector<int> &position, cmd_line &options, map<int,vector<vector<int> > > &state_changes, cmd_line &options) {
+    map <double,vector<double>> sel_trajectories;
+
+    for (int p = options.gs_p_start; p < options.gs_p_stop; p+=options.gs_p_step) {
 }
 
 
