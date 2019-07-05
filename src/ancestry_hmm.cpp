@@ -19,13 +19,14 @@
 #include <cstring> // JS
 #include <utility> // JS
 #include <iomanip> // JS
+#include <cstdlib> // JS
 
-using namespace std ;
 
 /// linear algebra library is armadillo
 #define ARMA_NO_DEBUG
 #include <armadillo>
 using namespace arma ;
+using namespace std ;
 
 /// our header files in /src directory
 #include "print_usage.h"
@@ -193,6 +194,11 @@ int main ( int argc, char *argv[] ) {
         map <double,vector<double>> sel_trajectories;
         lnl = selection_evaluate_point_genotypes(test_sel, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list, split_vecs, sel_trajectories);
         cout << "lnL for a selected site s=" << test_sel.sel << " at position " << test_sel.pos << " is: " << lnl << endl;
+        return 0;
+    }
+
+    if (options.run_gss == true) {
+        selection_golden_section(markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list);
         return 0;
     }
 

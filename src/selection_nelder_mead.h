@@ -524,10 +524,55 @@ void selection_grid(int p_start, int p_stop, int p_step, double s_start, double 
     }
 }
 
-void selection_golden_section(vector<markov_chain> &markov_chain_information, map<int, vector<vector< map< vector<transition_information>, double > > > > &transition_matrix_information, vector<double> &recombination_rate, vector<int> &position, cmd_line &options, map<int,vector<vector<int> > > &state_changes, cmd_line &options) {
-    map <double,vector<double>> sel_trajectories;
+selection gs_search() {}
 
-    for (int p = options.gs_p_start; p < options.gs_p_stop; p+=options.gs_p_step) {
+void selection_golden_section(vector<markov_chain> &markov_chain_information, map<int, vector<vector< map< vector<transition_information>, double > > > > &transition_matrix_information, vector<double> &recombination_rate, vector<int> &position, cmd_line &options, map<int,vector<vector<int> > > &state_changes) {
+    map <double,vector<double>> sel_trajectories;
+    double GR = (sqrt(5) + 1) / 2;
+
+    for (int p = options.gs_pstart; p < options.gs_pstop; p+=options.gs_pstep) {
+        vector <vector<double>> split_vecs;
+
+        selection point0;
+        selection point1;
+        selection point2;
+        selection point3;
+
+        point0.pos = p;
+        point1.pos = p;
+        point2.pos = p;
+        point3.pos = p;
+
+        point0.sel = options.gs_sstart;
+        point1.sel = options.gs_sstop;
+        point2.sel = point1.sel - (point1.sel - point0.sel) / GR;
+        point3.sel = point0.sel + (point1.sel - point0.sel) / GR;
+
+        selection_evaluate_point_genotypes( point0, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
+        selection_evaluate_point_genotypes( point1, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
+        selection_evaluate_point_genotypes( point2, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
+        selection_evaluate_point_genotypes( point3, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
+
+        int i = 0;
+
+        while (abs(point2.sel - point3.sel) > options.gs_precision || i < options.gs_max_iterations) {
+            if (point2.lnl > point3.lnl) {
+                point1 = point3;
+                point3 = point2;
+                point2.sel = point1.sel - (point1.sel - point0.sel) / GR;
+                selection_evaluate_point_genotypes( point2, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
+            }
+            else {
+                point0 = point2;
+                point2 = point3;
+                point3.sel = point0.sel + (point1.sel - point0.sel) / GR;
+                selection_evaluate_point_genotypes( point3, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
+            }
+            i++;
+        }
+
+        cout << position[point.pos] << "\t" << (point2.sel-point3.sel)/2 << "\t" << setprecision(12) << (point2.lnl-point3.lnl)/2 << "\t" << i << endl;
+    }
 }
 
 

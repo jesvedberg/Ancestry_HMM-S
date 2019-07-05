@@ -86,6 +86,10 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
     win_unit = "p"; // set default window size unit to percent
     win_percent = 100; // default window size in percent
     //win_morgan = 0.1; // default window size in morgans
+
+    // golden section search (gss) parameters
+    gs_max_iterations = 50; // max number of iterations in gss
+    gs_precision = 1e-5; // minimum recision in estimation of selection coeffient in gss
     
 	/// accept command line parameters
 	for (int i=1; i<argc; i++) {
@@ -267,6 +271,15 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
             grid_sstart = atof(argv[++i]);
             grid_sstop = atof(argv[++i]);
             grid_sstep = atof(argv[++i]);
+        }
+
+        if ( strcmp(argv[i],"--gss") == 0 ) {
+            run_gss = true;
+            gs_pstart = atoi(argv[++i]);
+            gs_pstop = atoi(argv[++i]);
+            gs_pstep = atoi(argv[++i]);
+            gs_sstart = atof(argv[++i]);
+            gs_sstop = atof(argv[++i]);
         }
 
         if ( strcmp(argv[i],"--testsel") == 0 ) {

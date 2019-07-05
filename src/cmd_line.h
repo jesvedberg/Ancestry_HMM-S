@@ -95,12 +95,14 @@ public:
     int test_pos;
     double test_sel;
 
+    bool run_gss;
     int gs_pstart;
     int gs_pstop;
     int gs_pstep;
     double gs_sstart;
     double gs_sstop;
-
+    int gs_max_iterations;
+    double gs_precision;
 
     // HMM chain window size
     string win_unit;
