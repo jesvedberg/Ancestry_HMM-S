@@ -88,7 +88,7 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
     //win_morgan = 0.1; // default window size in morgans
 
     // golden section search (gss) parameters
-    gs_max_iterations = 50; // max number of iterations in gss
+    //gs_max_iterations = 50; // max number of iterations in gss
     gs_precision = 1e-5; // minimum recision in estimation of selection coeffient in gss
     
 	/// accept command line parameters

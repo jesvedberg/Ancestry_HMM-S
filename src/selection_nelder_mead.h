@@ -534,44 +534,49 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
         vector <vector<double>> split_vecs;
 
         selection point0;
+        point0.pos = p;
+        point0.sel = 0;
+        selection_evaluate_point_genotypes( point0, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
+
         selection point1;
         selection point2;
         selection point3;
+        selection point4;
 
-        point0.pos = p;
         point1.pos = p;
         point2.pos = p;
         point3.pos = p;
+        point4.pos = p;
 
-        point0.sel = options.gs_sstart;
-        point1.sel = options.gs_sstop;
-        point2.sel = point1.sel - (point1.sel - point0.sel) / GR;
-        point3.sel = point0.sel + (point1.sel - point0.sel) / GR;
+        point1.sel = options.gs_sstart;
+        point2.sel = options.gs_sstop;
+        point3.sel = point2.sel - (point2.sel - point1.sel) / GR;
+        point4.sel = point1.sel + (point2.sel - point1.sel) / GR;
 
-        selection_evaluate_point_genotypes( point0, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
         selection_evaluate_point_genotypes( point1, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
         selection_evaluate_point_genotypes( point2, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
         selection_evaluate_point_genotypes( point3, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
+        selection_evaluate_point_genotypes( point4, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
 
         int i = 0;
 
-        while (abs(point2.sel - point3.sel) > options.gs_precision || i < options.gs_max_iterations) {
-            if (point2.lnl > point3.lnl) {
-                point1 = point3;
-                point3 = point2;
-                point2.sel = point1.sel - (point1.sel - point0.sel) / GR;
-                selection_evaluate_point_genotypes( point2, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
+        while (abs(point3.sel - point4.sel) > options.gs_precision) {
+            if (point3.lnl > point4.lnl) {
+                point2 = point4;
+                point4 = point3;
+                point3.sel = point2.sel - (point2.sel - point1.sel) / GR;
+                selection_evaluate_point_genotypes( point3, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
             }
             else {
-                point0 = point2;
-                point2 = point3;
-                point3.sel = point0.sel + (point1.sel - point0.sel) / GR;
-                selection_evaluate_point_genotypes( point3, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
+                point1 = point3;
+                point3 = point4;
+                point4.sel = point1.sel + (point2.sel - point1.sel) / GR;
+                selection_evaluate_point_genotypes( point4, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
             }
             i++;
         }
 
-        cout << position[point.pos] << "\t" << (point2.sel-point3.sel)/2 << "\t" << setprecision(12) << (point2.lnl-point3.lnl)/2 << "\t" << i << endl;
+        cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << endl;
     }
 }
 
