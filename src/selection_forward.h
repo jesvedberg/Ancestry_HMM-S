@@ -60,9 +60,15 @@ double markov_chain::selection_forward_probabilities_genotypes( map<int, vector<
     // Populate starting conditions
 
     // WARNING. Hardcoded for diploid data. Change
-    alphas[0] = {genofreq[0]*genofreq[0], 2*genofreq[0]*(1-genofreq[0]), (1-genofreq[0])*(1-genofreq[0])};
+    //alphas[0] = {genofreq[0]*genofreq[0], 2*genofreq[0]*(1-genofreq[0]), (1-genofreq[0])*(1-genofreq[0])};
 
-    //cerr << "cp2_3 " << go_downstream <<endl;
+    // Check how to specify nn. The current way is a bit of a hack.
+    double nn = transition_probabilites[ploidy_switch[0]][1].n_cols - 1;
+    for (int k = nn; k >= 0; k--) {
+        alphas[0][nn-k] = binomial(nn, k, genofreq[0]);
+    }
+
+    //cerr << "n_cols " << transition_probabilites[ploidy_switch[0]][1].n_cols <<endl;
 
     lnl += normalize( alphas[0] ) ;
     //cerr << "BEFORE: lnL: " << lnl <<  "  " << alphas[0] <<  "  " << alphas.size() <<  "  " << alphas[0].size() << endl;

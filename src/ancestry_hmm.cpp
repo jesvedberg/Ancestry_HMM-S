@@ -169,6 +169,15 @@ int main ( int argc, char *argv[] ) {
     }
     cerr << "Test1." << endl;
 
+    /*double n = 6;
+    vec test1;
+    test1.resize(n+1);
+    for (int k = n; k >= 0; k--) {
+        test1[n-k] = binomial(n,k,0.33);
+    }
+    cout << test1[0];
+    return 0; */
+
     // If using grid search
     if (options.calc_grid == true) {
         int p_start = options.grid_pstart;
