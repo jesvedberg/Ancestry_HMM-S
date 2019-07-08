@@ -66,6 +66,7 @@ using namespace std ;
 #include "golden_search.h"
 #include "bootstrap.h"
 
+#include "get_position.h" // JS
 #include "optimize_test_func.h" // Function for testing Nelder-Mead
 #include "fwd_iter.h" // JS
 #include "selection_trajectory.h" // JS

@@ -503,6 +503,21 @@ void selection_grid(int p_start, int p_stop, int p_step, double s_start, double 
 
     map <double,vector<double>> sel_trajectories;
 
+    if (options.is_coord ==  true) {
+        int p_start = get_position(options.grid_pstart, position);
+        int p_stop = get_position(options.grid_pstop, position);
+
+        if (p_start == -1) {
+            cerr << "ERROR: specified start coordinate for Golden section search not found on chromosome" << endl;
+            exit(1);
+        }
+        if ( p_start > p_stop ) {
+            cerr << "ERROR: specified stop coordinate for Golden section search is located before start coordinate." << endl;
+            exit(1);
+        }
+    }
+
+    // WARNING: Remove p_start, p_stop etc from arguments
     for (int p = p_start; p < p_stop; p+=p_step) {
         
         vector <vector<double>> split_vecs;
@@ -530,7 +545,28 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
     map <double,vector<double>> sel_trajectories;
     double GR = (sqrt(5) + 1) / 2;
 
-    for (int p = options.gs_pstart; p < options.gs_pstop; p+=options.gs_pstep) {
+    int pstart;
+    int pstop;
+
+    if (options.is_coord ==  true) {
+        pstart = get_position(options.gs_pstart, position);
+        pstop = get_position(options.gs_pstop, position);
+
+        if (pstart == -1) {
+            cerr << "ERROR: specified start coordinate for Golden section search not found on chromosome" << endl;
+            exit(1);
+        }
+        if ( pstart > pstop ) {
+            cerr << "ERROR: specified stop coordinate for Golden section search is located before start coordinate." << endl;
+            exit(1);
+        }
+    }
+    else {
+        pstart = options.gs_pstart;
+        pstop = options.gs_pstop;
+    }
+
+    for (int p = pstart; p < pstop; p+=options.gs_pstep) {
         vector <vector<double>> split_vecs;
 
         selection point0;

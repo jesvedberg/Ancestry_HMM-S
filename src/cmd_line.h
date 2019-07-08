@@ -103,6 +103,8 @@ public:
     double gs_sstop;
     int gs_max_iterations;
     double gs_precision;
+    
+    bool is_coord;
 
     // HMM chain window size
     string win_unit;

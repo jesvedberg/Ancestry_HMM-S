@@ -82,6 +82,10 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
     calc_grid = false;
     test_point = false;
     is_limitpos = false;
+    is_coord = false;
+
+    limit_win_start = 0; // if --chr_win is not set, read whole chromosome
+    limit_win_end = 1000000000; // see comment above
 
     win_unit = "p"; // set default window size unit to percent
     win_percent = 100; // default window size in percent
@@ -136,9 +140,12 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
         /// activate selection detection module
         /// uses the following format -j chromosome_of_interest (str) site_of_interest start_window (int) 
         /// window_start (int) window_end (int)
-        if ( strcmp(argv[i],"-j") == 0 ) {
+        if ( strcmp(argv[i],"--chr") == 0 ) {
             is_limit = true ;
             limit_chr = string(argv[++i]) ;
+        }
+
+        if ( strcmp(argv[i],"--chr_win") == 0 ) {
             limit_win_start = atoi(argv[++i]) ;
             limit_win_end = atoi(argv[++i]) ;
             //sel_site = atoi(argv[++i]) ;
@@ -282,6 +289,14 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
             gs_sstop = atof(argv[++i]);
         }
 
+        if ( strcmp(argv[i],"--gss_precision") == 0 ) {
+            gs_precision = atof(argv[++i]);
+        }
+
+        if ( strcmp(argv[i], "--unit_coords" ) == 0 ) {
+            is_coord = true ; 
+        }
+
         if ( strcmp(argv[i],"--testsel") == 0 ) {
             test_point = true;
             test_pos = atoi(argv[++i]);
@@ -306,9 +321,17 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
 
             if ( win_unit == "m") {
                 win_morgan = atof(argv[++i]);
+                if (win_morgan <= 0) {
+                    cerr << "\n\n\t\tERROR: windows size has to be specified with positive value.\n\n" ;
+                    exit(1) ;
+                }
             }
             else if (win_unit == "p") {
                 win_percent = atof(argv[++i]);
+                if (win_percent <= 0 || win_percent > 100) {
+                    cerr << "\n\n\t\tERROR: windows size has to be specified in percent (1-100).\n\n" ;
+                    exit(1) ;
+                }
             }
             /*else if (win_unit = "b") {
                 win_bp = atoi(argv[++i]);
