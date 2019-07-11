@@ -214,7 +214,7 @@ vector<mat> fwd_iter_genotype_freq(vector<double> &recombination_rate, vector<do
         transition_rates.push_back(tr_mat) ;
 
         freq = freq_ ;
-        cerr << "Approx:\t" << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << "\t" << tr_mat(0,1)/r << "\t" << tr_mat(1,0)/r << endl;
+        //cerr << "Approx:\t" << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << "\t" << tr_mat(0,1)/r << "\t" << tr_mat(1,0)/r << endl;
     }
     //cerr << "genofreq\t" << positions[gfsite]  << "\t" << genofreq << endl;
 

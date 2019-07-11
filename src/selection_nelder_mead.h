@@ -152,9 +152,9 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
 
     if (options.traj_function == 4) {
         if (point.sel == 0.0) {
-            cerr << "fwd_vector" << endl;
+            //cerr << "fwd_vector" << endl;
             fwd_trans = fwd_iter_genotype_freq(split_vecs[0], sel_traject, m, options.ne, genofreqs[0]) ; //options.ne
-            cerr << endl << "back_vector" << endl;
+            //cerr << endl << "back_vector" << endl;
             back_trans = fwd_iter_genotype_freq(split_vecs[1], sel_traject, m, options.ne, genofreqs[1]) ;
             /*genofreqs[0].push_back(sel_traject.back());
             genofreqs[1].push_back(sel_traject.back());
@@ -164,24 +164,24 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
         else {
             genofreqs[0].push_back(sel_traject.back());
             genofreqs[1].push_back(sel_traject.back());
-            cerr << "fwd" << endl;
+            //cerr << "fwd" << endl;
             fwd_trans = approx_curve(split_vecs[0], sel_traject, m) ; //options.ne
-            cerr << "back" << endl;
+            //cerr << "back" << endl;
             back_trans = approx_curve(split_vecs[1], sel_traject, m) ;
         }
     }
     else if (options.traj_function == 3) {
         genofreqs[0].push_back(sel_traject.back());
         genofreqs[1].push_back(sel_traject.back());
-        cerr << "fwd" << endl;
+        //cerr << "fwd" << endl;
         fwd_trans = approx_curve_3point(split_vecs[0], sel_traject, m) ; //options.ne
-        cerr << "back" << endl;
+        //cerr << "back" << endl;
         back_trans = approx_curve_3point(split_vecs[1], sel_traject, m) ;
     }
     else { 
-        cerr << "fwd_vector" << endl;
+        //cerr << "fwd_vector" << endl;
         fwd_trans = fwd_iter_genotype_freq(split_vecs[0], sel_traject, m, options.ne, genofreqs[0]) ; //options.ne
-        cerr << endl << "back_vector" << endl;
+        //cerr << endl << "back_vector" << endl;
         back_trans = fwd_iter_genotype_freq(split_vecs[1], sel_traject, m, options.ne, genofreqs[1]) ;
     }
     
@@ -192,7 +192,7 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
     vector<mat> back_trans = approx_curve(split_vecs[1], sel_traject, m) ;
      */
 
-    cerr << "strg4: genofreq  " << genofreqs.size() << "gf1 " << genofreqs[0].size() << endl;
+    //cerr << "strg4: genofreq  " << genofreqs.size() << "gf1 " << genofreqs[0].size() << endl;
 
     vector<vector<mat>> tr_vector;
     tr_vector.push_back(fwd_trans);
@@ -206,7 +206,7 @@ double selection_evaluate_point(selection &point, vector<markov_chain> &markov_c
     vector<vector<mat>> t_rates = selection_transition_rates(point, recombination_rate, options);
     //vector<vector<mat>> t_rates = selection_transition_rates_genotypes(point, recombination_rate, options, position); // test. remove
     
-    cerr << "BP3: After transition rates." << endl;
+    //cerr << "BP3: After transition rates." << endl;
     
     double comb_lnl = 0;
     bool go_backwards = false;
@@ -222,7 +222,7 @@ double selection_evaluate_point(selection &point, vector<markov_chain> &markov_c
                 selection_transition_matrix( transition_matrix, transition_matrix_information[markov_chain_information[m].ploidy_switch[p]], recombination_rate, position, markov_chain_information[m].ploidy_switch[p], t_rates[i] ) ;
             }
         }
-        cerr << "BP4: After transition matrix." << endl;
+        //cerr << "BP4: After transition matrix." << endl;
         /// compute transitions within a state
         vector<mat> interploidy_transitions ;
         //interploidy_transitions = create_interploidy_transitions( state_changes, vertex, options.ancestry_proportion ) ;
@@ -234,7 +234,7 @@ double selection_evaluate_point(selection &point, vector<markov_chain> &markov_c
             //cerr << "Sample#: " << m << endl;
             lnl += markov_chain_information[m].selection_forward_probabilities( transition_matrix, interploidy_transitions, point, go_backwards ) ;
         }
-        cerr << "BP5: After compute forward. " << i << " " << lnl << endl;
+        //cerr << "BP5: After compute forward. " << i << " " << lnl << endl;
         comb_lnl += lnl;
         go_backwards = true;
     }

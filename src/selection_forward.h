@@ -45,7 +45,7 @@ double markov_chain::selection_forward_probabilities_genotypes( map<int, vector<
     /// clear the fw probs matrix
     alphas.resize( transition_probabilites[ploidy_switch[0]].size() ) ;
 
-    cerr << "cp2_1_1 " << transition_probabilites[ploidy_switch[0]].size() << " " << transition_probabilites[ploidy_switch[0]][1].n_cols << endl;
+    //cerr << "cp2_1_1 " << transition_probabilites[ploidy_switch[0]].size() << " " << transition_probabilites[ploidy_switch[0]][1].n_cols << endl;
 
     /// genotype frequencies
     //genotype_freqs = genofreq;
@@ -56,7 +56,7 @@ double markov_chain::selection_forward_probabilities_genotypes( map<int, vector<
     //// set all values to zero, but mostly just reize
     alphas[0].resize( transition_probabilites[ploidy_switch[0]][1].n_cols ) ;
     
-    cerr << "cp2_1_2 " << endl;
+    //cerr << "cp2_1_2 " << endl;
     /// get initial state set
     //alphas[0] = emission_probabilities[point.pos] * start_prob ;
 
@@ -73,7 +73,7 @@ double markov_chain::selection_forward_probabilities_genotypes( map<int, vector<
         cerr << "cp2_3 " << alphas[0][nn-k] << endl;
     }
 
-    cerr << "n_cols " << transition_probabilites[ploidy_switch[0]][1].n_cols <<endl;
+    //cerr << "n_cols " << transition_probabilites[ploidy_switch[0]][1].n_cols <<endl;
 
     lnl += normalize( alphas[0] ) ;
     //cerr << "BEFORE: lnL: " << lnl <<  "  " << alphas[0] <<  "  " << alphas.size() <<  "  " << alphas[0].size() << endl;
