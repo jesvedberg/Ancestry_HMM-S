@@ -1,3 +1,6 @@
+#Old executables
+old_executables/
+
 # VS code subfolder
 .vscode/
 !.vscode/settings.json

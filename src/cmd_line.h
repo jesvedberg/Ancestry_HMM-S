@@ -106,6 +106,8 @@ public:
     
     bool is_coord;
 
+    int traj_function = 0;
+
     // HMM chain window size
     string win_unit;
     double win_morgan;

@@ -128,7 +128,7 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
         sel_traject = it->second;
     }
     
-    cerr << "strg3: after selection_trajectory  " << endl;
+    cerr << "Point: sel: " << point.pos << " " << point.sel << endl;
 
     
     /* cerr << point << endl;
@@ -140,18 +140,57 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
     //vector<mat> fwd_trans = fwd_iter(vecf, sel_traject, tt, m, generations, n) ;
     //vector<mat> back_trans = fwd_iter(vecb, sel_traject, tt, m, generations, n) ;
 
-    // generates two vectors of transition rates, both going away from the site of interest in different directions
-
+    // generates two 
+    
     vector<double> gf1;
     vector<double> gf2;
     genofreqs.push_back(gf1);
     genofreqs.push_back(gf2);
 
+    vector<mat> fwd_trans;
+    vector<mat> back_trans;
 
-    cerr << "fwd_vector" << endl;
-    vector<mat> fwd_trans = fwd_iter_genotype_freq(split_vecs[0], sel_traject, m, options.ne, genofreqs[0]) ; //options.ne
-    //cerr << endl << "back_vector" << endl;
-    vector<mat> back_trans = fwd_iter_genotype_freq(split_vecs[1], sel_traject, m, options.ne, genofreqs[1]) ;
+    if (options.traj_function == 4) {
+        if (point.sel == 0.0) {
+            cerr << "fwd_vector" << endl;
+            fwd_trans = fwd_iter_genotype_freq(split_vecs[0], sel_traject, m, options.ne, genofreqs[0]) ; //options.ne
+            cerr << endl << "back_vector" << endl;
+            back_trans = fwd_iter_genotype_freq(split_vecs[1], sel_traject, m, options.ne, genofreqs[1]) ;
+            /*genofreqs[0].push_back(sel_traject.back());
+            genofreqs[1].push_back(sel_traject.back());
+            fwd_trans = neutral_rates_vector(split_vecs[0], m, n, generations);
+            back_trans = neutral_rates_vector(split_vecs[1], m, n, generations); */
+        }
+        else {
+            genofreqs[0].push_back(sel_traject.back());
+            genofreqs[1].push_back(sel_traject.back());
+            cerr << "fwd" << endl;
+            fwd_trans = approx_curve(split_vecs[0], sel_traject, m) ; //options.ne
+            cerr << "back" << endl;
+            back_trans = approx_curve(split_vecs[1], sel_traject, m) ;
+        }
+    }
+    else if (options.traj_function == 3) {
+        genofreqs[0].push_back(sel_traject.back());
+        genofreqs[1].push_back(sel_traject.back());
+        cerr << "fwd" << endl;
+        fwd_trans = approx_curve_3point(split_vecs[0], sel_traject, m) ; //options.ne
+        cerr << "back" << endl;
+        back_trans = approx_curve_3point(split_vecs[1], sel_traject, m) ;
+    }
+    else { 
+        cerr << "fwd_vector" << endl;
+        fwd_trans = fwd_iter_genotype_freq(split_vecs[0], sel_traject, m, options.ne, genofreqs[0]) ; //options.ne
+        cerr << endl << "back_vector" << endl;
+        back_trans = fwd_iter_genotype_freq(split_vecs[1], sel_traject, m, options.ne, genofreqs[1]) ;
+    }
+    
+    // testing vladimir's approximation
+    /*genofreqs[0].push_back(sel_traject.back());
+    genofreqs[1].push_back(sel_traject.back());
+    vector<mat> fwd_trans = approx_curve(split_vecs[0], sel_traject, m) ; //options.ne
+    vector<mat> back_trans = approx_curve(split_vecs[1], sel_traject, m) ;
+     */
 
     cerr << "strg4: genofreq  " << genofreqs.size() << "gf1 " << genofreqs[0].size() << endl;
 
@@ -612,7 +651,7 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
             i++;
         }
 
-        cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << endl;
+        cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << "\t" << point3.lnl << "\t" << point4.lnl << "\t" << (point3.lnl+point4.lnl)/2 << "\t" << point0.lnl << "\t" << endl;
     }
 }
 

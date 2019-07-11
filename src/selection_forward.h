@@ -37,13 +37,15 @@ double markov_chain::selection_forward_probabilities( map<int, vector<mat> > &tr
 }
 
 double markov_chain::selection_forward_probabilities_genotypes( map<int, vector<mat> > &transition_probabilites, vector<mat> &interploidy_transitions, selection &point, bool go_downstream, vector<double> &genofreq, vector<int> &position ) {
-    //cerr << "cp2_1 ";
+    cerr << "cp2_1 " << genofreq[0] << endl;
 
     /// return log likelihood which is sum of cts
     double lnl = 0 ;
     
     /// clear the fw probs matrix
     alphas.resize( transition_probabilites[ploidy_switch[0]].size() ) ;
+
+    cerr << "cp2_1_1 " << transition_probabilites[ploidy_switch[0]].size() << " " << transition_probabilites[ploidy_switch[0]][1].n_cols << endl;
 
     /// genotype frequencies
     //genotype_freqs = genofreq;
@@ -54,6 +56,7 @@ double markov_chain::selection_forward_probabilities_genotypes( map<int, vector<
     //// set all values to zero, but mostly just reize
     alphas[0].resize( transition_probabilites[ploidy_switch[0]][1].n_cols ) ;
     
+    cerr << "cp2_1_2 " << endl;
     /// get initial state set
     //alphas[0] = emission_probabilities[point.pos] * start_prob ;
 
@@ -64,11 +67,13 @@ double markov_chain::selection_forward_probabilities_genotypes( map<int, vector<
 
     // Check how to specify nn. The current way is a bit of a hack.
     double nn = transition_probabilites[ploidy_switch[0]][1].n_cols - 1;
+    cerr << "cp2_2 " << nn << endl;
     for (int k = nn; k >= 0; k--) {
         alphas[0][nn-k] = binomial(nn, k, genofreq[0]);
+        cerr << "cp2_3 " << alphas[0][nn-k] << endl;
     }
 
-    //cerr << "n_cols " << transition_probabilites[ploidy_switch[0]][1].n_cols <<endl;
+    cerr << "n_cols " << transition_probabilites[ploidy_switch[0]][1].n_cols <<endl;
 
     lnl += normalize( alphas[0] ) ;
     //cerr << "BEFORE: lnL: " << lnl <<  "  " << alphas[0] <<  "  " << alphas.size() <<  "  " << alphas[0].size() << endl;

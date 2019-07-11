@@ -2,6 +2,36 @@
 #define __FWD_ITER_H
 
 
+double neutral_rate(int n, double mm, double gen) {
+    double m = 1 - mm;
+    return 2*n*m*(1-exp(-gen/(2*n)));
+}
+
+vector<mat> neutral_rates_vector(vector<double> &recombination_rate, double m, int n, int generations) {
+    vector<mat> transition_rates ;
+    int r;
+
+    double tr01 = neutral_rate(n, m, generations);
+    double tr10 = neutral_rate(n, 1-m, generations);
+
+    for ( int site = 0 ; site < recombination_rate.size() ; site ++ ) {
+        r = recombination_rate[site] ;
+        mat tr_mat(2,2);
+
+        tr_mat(0,0) = 1-r*tr01;
+        tr_mat(0,1) = r*tr01;
+        tr_mat(1,0) = r*tr10;
+        tr_mat(1,1) = 1-r*tr01;
+
+        //cerr << "Neutral: " << tr01 << '\t' << tr10 << '\t' << tr_mat(0,1) << '\t' << tr_mat(1,0) << endl;
+
+        transition_rates.push_back(tr_mat);
+    }
+
+    return transition_rates;
+    
+}
+
 // forward iteration algoritm for calculating transition rates across a chromosome
 // takes vector of recombination rates (sites) and vector of allele frequency change of the selected site over time
 // uses the 2-site version with back coalescence.
@@ -184,6 +214,7 @@ vector<mat> fwd_iter_genotype_freq(vector<double> &recombination_rate, vector<do
         transition_rates.push_back(tr_mat) ;
 
         freq = freq_ ;
+        cerr << "Approx:\t" << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << "\t" << tr_mat(0,1)/r << "\t" << tr_mat(1,0)/r << endl;
     }
     //cerr << "genofreq\t" << positions[gfsite]  << "\t" << genofreq << endl;
 
@@ -315,7 +346,7 @@ vector<mat> fwd_curve(vector<double> &recombination_rate, vector<double> &basefr
 
 // Vladimir's approximative algorithm for calculating transition rates.
 // Not used at the moment, since it requires constant recombinational distances between the sites.
-vector<mat> approx_curve(vector<double> &recombination_rate, vector<double> &basefreq, int tt, double m, int generations) {
+vector<mat> approx_curve(vector<double> &recombination_rate, vector<double> &basefreq, double m) {
     mat V1_mat(2,2);
     mat V2_mat(2,2);
     mat M_mat(2,2);
@@ -332,17 +363,28 @@ vector<mat> approx_curve(vector<double> &recombination_rate, vector<double> &bas
     double x1 = 0.01;
     double x2 = 0.1;
     
-    // generates 4 anchor points to generate curlve
+    // compute 4 anchor points to generate curve
+
     iterate_site(V1_mat, basefreq, r_est, x1, m);
     iterate_site(V2_mat, basefreq, r_est, x2, m);
     iterate_site(M_mat, basefreq, r_est, 2, m);
     iterate_site(U_mat, basefreq, r_est, 0, m);
+    
 
     // for selected allele
     L1_sel = log((V1_mat(0,1)-M_mat(0,1))/(U_mat(0,1)-M_mat(0,1)));
     L2_sel = log((V2_mat(0,1)-M_mat(0,1))/(U_mat(0,1)-M_mat(0,1)));
     p_sel = log(L1_sel/L2_sel)/log(x1/x2);
     alpha_sel = -L1_sel/pow(x1,p_sel);
+
+    cerr << "V1_mat: " << V1_mat(0,0) << " " << V1_mat(0,1) << " " << V1_mat(1,0) << " " << V1_mat(1,1) << endl;
+    cerr << "V2_mat: " << V2_mat(0,0) << " " << V2_mat(0,1) << " " << V2_mat(1,0) << " " << V2_mat(1,1) << endl;
+    cerr << "M_mat: " << M_mat(0,0) << " " << M_mat(0,1) << " " << M_mat(1,0) << " " << M_mat(1,1) << endl;
+    cerr << "U_mat: " << U_mat(0,0) << " " << U_mat(0,1) << " " << U_mat(1,0) << " " << U_mat(1,1) << endl;
+    cerr << "L1_sel: " << L1_sel << endl;
+    cerr << "L2_sel: " << L2_sel << endl;
+    cerr << "p_sel: " << p_sel << endl;
+    cerr << "alpha_sel: " << alpha_sel << endl;
 
     // for non-selected allele
     L1_non = log((V1_mat(1,0)-M_mat(1,0))/(U_mat(1,0)-M_mat(1,0)));
@@ -357,25 +399,103 @@ vector<mat> approx_curve(vector<double> &recombination_rate, vector<double> &bas
     double cumulative_r = 0;
     double sel_trans;
     double non_trans;
+    //double diff = 0;
 
     // loops over each site and calculates the transition rates
     for ( int site = 0 ; site < recombination_rate.size() ; site ++ ) {
         r = recombination_rate[site] ;
+        cumulative_r += r;
         //r=0.0001;
 
         sel_trans = M_mat(0,1)+(U_mat(0,1)-M_mat(0,1))*exp(-alpha_sel*pow(cumulative_r,p_sel));
         non_trans = M_mat(1,0)+(U_mat(1,0)-M_mat(1,0))*exp(-alpha_non*pow(cumulative_r,p_non));
 
-        tr_mat(0,0) = 1 -sel_trans;
-        tr_mat(0,1) = sel_trans;
-        tr_mat(1,0) = non_trans;
-        tr_mat(1,1) = 1 - non_trans;
+        tr_mat(0,0) = 1 -r*sel_trans/r_est;
+        tr_mat(0,1) = r*sel_trans/r_est;
+        tr_mat(1,0) = r*non_trans/r_est;
+        tr_mat(1,1) = 1 - r*non_trans/r_est;
+
+        /*tr_mat(0,0) = 1 -r*non_trans;
+        tr_mat(0,1) = r*non_trans;
+        tr_mat(1,0) = r*sel_trans;
+        tr_mat(1,1) = 1 - r*sel_trans; */
+
+        //cerr << "Approx:\t" << cumulative_r << "\t" << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << "\t" << tr_mat(0,1)/r << "\t" << tr_mat(1,0)/r << endl;
+
+        //diff = tr_mat(0,1);
+
+        transition_rates.push_back(tr_mat);
+    }
+
+    return transition_rates;
+}
+
+// Vladimir's earlier 3-point approximation of the transition rates
+vector<mat> approx_curve_3point(vector<double> &recombination_rate, vector<double> &basefreq, double m) {
+
+    //k = x1 / ((1/((M/U)-1)) - (1/((M/V)-1)))
+    //r0 = k / ((M/V)-1)
+    //return lambda r: M / (1 + (k/(r+r0)))
+
+    mat V_mat(2,2);
+    mat M_mat(2,2);
+    mat U_mat(2,2);
+
+    double r_est = 0.0001;
+    double r_u = 0.05;
+
+    double k_sel;
+    double k_non;
+
+    double r0_sel;
+    double r0_non;
+    
+    // compute 4 anchor points to generate curve
+    iterate_site(U_mat, basefreq, r_est, r_u, m);
+    iterate_site(M_mat, basefreq, r_est, 2, m);
+    iterate_site(V_mat, basefreq, r_est, 0, m);
+
+    k_non = r_u / (1/(M_mat(1,0)/U_mat(1,0))-(1/(M_mat(1,0)/V_mat(1,0))));
+    k_sel = r_u / (1/(M_mat(0,1)/U_mat(0,1))-(1/(M_mat(0,1)/V_mat(0,1))));
+
+    r0_non = k_non / ((M_mat(1,0)/V_mat(1,0))-1);
+    r0_sel = k_sel / ((M_mat(0,1)/V_mat(0,1))-1);
+
+    vector<mat> transition_rates ;
+    double r;
+    mat tr_mat(2,2);
+    double cumulative_r = 0;
+    double sel_trans;
+    double non_trans;
+    //double diff = 0;
+
+    // loops over each site and calculates the transition rates
+    for ( int site = 0 ; site < recombination_rate.size() ; site ++ ) {
+        r = recombination_rate[site] ;
+        cumulative_r += r;
+        //r=0.0001;
+
+        sel_trans = M_mat(0,1) / (1+(k_sel/(cumulative_r+r0_sel)));
+        non_trans = M_mat(1,0) / (1+(k_non/(cumulative_r+r0_non)));
+
         
-        transition_rates.push_back(tr_mat) ;
+        tr_mat(0,0) = 1 -r*sel_trans/r_est;
+        tr_mat(0,1) = r*sel_trans/r_est;
+        tr_mat(1,0) = r*non_trans/r_est;
+        tr_mat(1,1) = 1 - r*non_trans/r_est;
+        
+        /*
+        tr_mat(0,0) = 1 -r*non_trans;
+        tr_mat(0,1) = r*non_trans;
+        tr_mat(1,0) = r*sel_trans;
+        tr_mat(1,1) = 1 - r*sel_trans;
+        */
 
-        cerr << "Approx:\t" << cumulative_r << "\t" << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << "\t" << tr_mat(0,1)/r << "\t" << tr_mat(1,0)/r << endl;
+        //cerr << "Approx:\t" << cumulative_r << "\t" << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << "\t" << tr_mat(0,1)/r << "\t" << tr_mat(1,0)/r << endl;
 
-        cumulative_r = cumulative_r + r;
+        //diff = tr_mat(0,1);
+
+        transition_rates.push_back(tr_mat);
     }
 
     return transition_rates;

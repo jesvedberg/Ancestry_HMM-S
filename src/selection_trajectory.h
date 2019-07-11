@@ -7,7 +7,7 @@ void selection_trajectory(vector<double> &freq, double s, int tt, double m, int 
 {
     // returns flat vector if selection is 0 (ie, no change in ellele frequency over time)
     if ( s == 0) {
-        freq.assign(generations,0.5); // maybe use a different value than 0.5???
+        freq.assign(generations,m); // maybe use a different value than 0.5??? But ony 0.5 works!?!?!
         return;
     }
 

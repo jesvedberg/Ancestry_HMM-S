@@ -342,6 +342,10 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
                 exit(1) ;
             }
         }
+
+        if ( strcmp(argv[i],"--traj") == 0 ) {
+            traj_function = atoi(argv[++i]) ;
+        }
     }
     
     if ( input_file == "null" ) {
