@@ -72,6 +72,7 @@ using namespace std ;
 #include "selection_trajectory.h" // JS
 #include "split_vector.h" // JS
 #include "selection_forward.h" // JS
+#include "selection_transition_rates.h" // JS
 #include "selection_nelder_mead.h" // JS
 
 
