@@ -377,14 +377,14 @@ vector<mat> approx_curve(vector<double> &recombination_rate, vector<double> &bas
     p_sel = log(L1_sel/L2_sel)/log(x1/x2);
     alpha_sel = -L1_sel/pow(x1,p_sel);
 
-    cerr << "V1_mat: " << V1_mat(0,0) << " " << V1_mat(0,1) << " " << V1_mat(1,0) << " " << V1_mat(1,1) << endl;
+    /*cerr << "V1_mat: " << V1_mat(0,0) << " " << V1_mat(0,1) << " " << V1_mat(1,0) << " " << V1_mat(1,1) << endl;
     cerr << "V2_mat: " << V2_mat(0,0) << " " << V2_mat(0,1) << " " << V2_mat(1,0) << " " << V2_mat(1,1) << endl;
     cerr << "M_mat: " << M_mat(0,0) << " " << M_mat(0,1) << " " << M_mat(1,0) << " " << M_mat(1,1) << endl;
     cerr << "U_mat: " << U_mat(0,0) << " " << U_mat(0,1) << " " << U_mat(1,0) << " " << U_mat(1,1) << endl;
     cerr << "L1_sel: " << L1_sel << endl;
     cerr << "L2_sel: " << L2_sel << endl;
     cerr << "p_sel: " << p_sel << endl;
-    cerr << "alpha_sel: " << alpha_sel << endl;
+    cerr << "alpha_sel: " << alpha_sel << endl; */
 
     // for non-selected allele
     L1_non = log((V1_mat(1,0)-M_mat(1,0))/(U_mat(1,0)-M_mat(1,0)));

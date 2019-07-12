@@ -49,13 +49,13 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
         split_vecs = split_vector(point.pos, recombination_rate, options) ;
     }
 
-    cerr << "strg1: after vecf, recombination_rate.size()  " << recombination_rate.size() << endl;
+    //cerr << "strg1: after vecf, recombination_rate.size()  " << recombination_rate.size() << endl;
 
     //vector<int> posvecf ;
     //vector<int> posvecb ;
     //split_vector_int(point.pos, position, posvecb, posvecf) ;
 
-    cerr << "strg2: after posvecf  ";
+    //cerr << "strg2: after posvecf  ";
 
     double m = options.ancestry_pulses[1].proportion;
     int generations = options.ancestry_pulses[1].time ;
@@ -150,7 +150,7 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
 }
 
 double selection_evaluate_point_genotypes(selection &point, vector<markov_chain> &markov_chain_information, map<int, vector<vector< map< vector<transition_information>, double > > > > &transition_matrix_information, vector<double> &recombination_rate, vector<int> &position, cmd_line &options, map<int,vector<vector<int> > > &state_changes, vector <vector<double>> &split_vecs, map <double,vector<double>> &sel_trajectories) {
-    cerr << "BP2: Before transition rates." << endl;
+    //cerr << "BP2: Before transition rates." << endl;
     //vector<vector<mat>> t_rates = selection_transition_rates(point, recombination_rate, options);
 
     vector < vector<double> > genofreqs ;
@@ -161,7 +161,7 @@ double selection_evaluate_point_genotypes(selection &point, vector<markov_chain>
         cerr << t_rates[0][i] << endl;
     }*/
 
-    cerr << "BP3: After transition rates." << endl;
+    //cerr << "BP3: After transition rates." << endl;
     
     double comb_lnl = 0;
     bool go_backwards = false;
@@ -184,7 +184,7 @@ double selection_evaluate_point_genotypes(selection &point, vector<markov_chain>
         
         /// now compute the forward probabilities
         double lnl = 0 ;
-        cerr << "markov_chain_information.size()  " << markov_chain_information.size() << endl;
+        //cerr << "markov_chain_information.size()  " << markov_chain_information.size() << endl;
         for ( int m = 0 ; m < markov_chain_information.size() ; m ++ ) {
         //for ( int m = 0 ; m < 1 ; m ++ ) {
             //cerr << "Sample#: " << m << endl;
@@ -194,7 +194,7 @@ double selection_evaluate_point_genotypes(selection &point, vector<markov_chain>
             continue;*/
             lnl += markov_chain_information[m].selection_forward_probabilities_genotypes( transition_matrix, interploidy_transitions, point, go_backwards, genofreqs[i], position ) ;
         }
-        cerr << "BP5: After compute forward. " << i << " " << lnl << endl;
+        //cerr << "BP5: After compute forward. " << i << " " << lnl << endl;
         comb_lnl += lnl;
         go_backwards = true;
     }
