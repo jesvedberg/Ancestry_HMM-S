@@ -137,36 +137,6 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
         }
 
 
-        /// activate selection detection module
-        /// uses the following format -j chromosome_of_interest (str) site_of_interest start_window (int) 
-        /// window_start (int) window_end (int)
-        if ( strcmp(argv[i],"--chr") == 0 ) {
-            is_limit = true ;
-            limit_chr = string(argv[++i]) ;
-        }
-
-        if ( strcmp(argv[i],"--chr_win") == 0 ) {
-            limit_win_start = atoi(argv[++i]) ;
-            limit_win_end = atoi(argv[++i]) ;
-            //sel_site = atoi(argv[++i]) ;
-
-            // minimum and maximum limits for selective coeffient to be estimated
-            sel_max = 0.4;
-            sel_min = 0.001;
-            pos_margin = 0; //maybe set this to 1000??
-
-            sel_limit = 0.8;
-            pos_limit = 0.8;
-
-            cerr << endl << limit_chr << "\t" << limit_win_start << "\t" << limit_win_end << "\t" << endl ;
-
-            /// check if win_start < win_end and site is located within window
-            if ( limit_win_end <= limit_win_start ) {
-                cerr << "\n\n\t\t ERROR: formatting for window is wrong\n\n" ;
-                print_usage() ;
-                exit(1) ;
-            }
-        }
     
 
 
@@ -268,6 +238,42 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
         }
         if ( strcmp(argv[i],"--fix") == 0 ) {
             ancestral_fixed = true ;
+        }
+
+
+
+        ///// Adaptive introgression stuff below
+
+
+        /// activate selection detection module
+        /// uses the following format -j chromosome_of_interest (str) site_of_interest start_window (int) 
+        /// window_start (int) window_end (int)
+        if ( strcmp(argv[i],"--chr") == 0 ) {
+            is_limit = true ;
+            limit_chr = string(argv[++i]) ;
+        }
+
+        if ( strcmp(argv[i],"--chr_win") == 0 ) {
+            limit_win_start = atoi(argv[++i]) ;
+            limit_win_end = atoi(argv[++i]) ;
+            //sel_site = atoi(argv[++i]) ;
+
+            // minimum and maximum limits for selective coeffient to be estimated
+            sel_max = 0.4;
+            sel_min = 0.001;
+            pos_margin = 0; //maybe set this to 1000??
+
+            sel_limit = 0.8;
+            pos_limit = 0.8;
+
+            cerr << endl << limit_chr << "\t" << limit_win_start << "\t" << limit_win_end << "\t" << endl ;
+
+            /// check if win_start < win_end and site is located within window
+            if ( limit_win_end <= limit_win_start ) {
+                cerr << "\n\n\t\t ERROR: formatting for window is wrong\n\n" ;
+                print_usage() ;
+                exit(1) ;
+            }
         }
 
         if ( strcmp(argv[i],"--grid") == 0 ) {

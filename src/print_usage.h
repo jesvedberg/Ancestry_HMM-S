@@ -36,8 +36,22 @@ void print_usage() {
 
     /// Parameters for adaptive introgression
     cerr << "\toptional and relevant only for detecting and quantifying selection:" << endl ;
-    cerr << "\t\t-j [string ] [int] [int] [int] ..." << endl ;
-    cerr << "\t\t\t chromosome name, start of window surrounding site, end of window and location of site of interest" << endl ;
+    cerr << "\t\t--chr [string]" << endl ;
+    cerr << "\t\t\t specify chromosome that will be analyzed" << endl ;
+    cerr << "\t\t--chr_win [int] [int]" << endl ;
+    cerr << "\t\t\t limit region on chromosome that will be analyzed (optional)" << endl ;
+    cerr << "\t\t--grid [int] [int] [int] [float] [float] [float]" << endl ;
+    cerr << "\t\t\t calculate likelihood rations in a grid. parameters: chromosomal position start, stop, step, selection coefficient start, stop, step." << endl ;
+    cerr << "\t\t--gss [int] [int] [int] [float] [float]" << endl ;
+    cerr << "\t\t\t golden section search for optimal selection coeffient at each site. parameters: chromosomal position start, stop, step, selection coefficient start, stop" << endl ;
+    cerr << "\t\t--gss_precision [float]" << endl ;
+    cerr << "\t\t\t specify precision in finding optimal value of s using golden section search. default: 1e-5" << endl ;
+    cerr << "\t\t--unit_coords" << endl ;
+    cerr << "\t\t\t unit for start and stop position in grid and gss search can be defined as chromosome coordinates rather than line in file. default off" << endl ;
+    cerr << "\t\t--window [string] [float]" << endl ;
+    cerr << "\t\t\t specify size of Markov chain in percent or Morgans. \"p 10\" extends the markov chain 10% of chromosome length on each side of selected site. \"m 0.1\" extends the windows 0.1 Morgan on each side of the selected site." << endl ;
+    cerr << "\t\t--traj [int]" << endl ;
+    cerr << "\t\t\t change algorithm for generating selection trajectories. 3: 3-point approximation, 4: 4-point approximation, default: forward iteration." << endl ;
     
 }
 
