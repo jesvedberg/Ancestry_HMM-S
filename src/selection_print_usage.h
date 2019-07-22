@@ -1,5 +1,5 @@
-#ifndef __PRINT_USAGE_H
-#define __PRINT_USAGE_H
+#ifndef __SELECTION_PRINT_USAGE_H
+#define __SELECTION_PRINT_USAGE_H
 
 void print_usage() {
     

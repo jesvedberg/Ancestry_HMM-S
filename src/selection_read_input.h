@@ -1,5 +1,5 @@
-#ifndef __READ_INPUT_H
-#define __READ_INPUT_H
+#ifndef __SELECTION_READ_INPUT_H
+#define __SELECTION_READ_INPUT_H
 
 void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_information, map<int,vector<vector<int> > > &state_list, vector<int> &position, vector<double> &recombination_rate, vector<string> &chromosomes, int &sel_pos ) {
     

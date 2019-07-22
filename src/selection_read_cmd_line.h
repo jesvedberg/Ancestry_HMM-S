@@ -1,5 +1,5 @@
-#ifndef __READ_CMD_LINE_H
-#define __READ_CMD_LINE_H
+#ifndef __SELECTION_READ_CMD_LINE_H
+#define __SELECTION_READ_CMD_LINE_H
 
 void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
     

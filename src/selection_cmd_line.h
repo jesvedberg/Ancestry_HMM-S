@@ -1,5 +1,5 @@
-#ifndef __CMD_LINE_H
-#define __CMD_LINE_H
+#ifndef __SELECTION_CMD_LINE_H
+#define __SELECTION_CMD_LINE_H
 
 /// command line information and global parameters
 class cmd_line {
