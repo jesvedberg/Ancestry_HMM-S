@@ -29,7 +29,7 @@ using namespace arma ;
 using namespace std ;
 
 /// our header files in /src directory
-#include "print_usage.h"
+#include "selection_print_usage.h"
 #include "factorial.h"
 #include "nchoosek.h" 
 #include "subsample.h" 
@@ -39,7 +39,7 @@ using namespace std ;
 #include "ancestry_pulse.h"
 #include "ploidy_path.h" 
 #include "selection_class.h" // JS
-#include "markov_chain.h"
+#include "selection_markov_chain.h"
 #include "read_samples.h" 
 #include "pulses_to_ancestry.h" 
 #include "compute_forward.h"
@@ -48,9 +48,9 @@ using namespace std ;
 #include "viterbi.h" 
 #include "transition_information.h"
 #include "exponentiate_matrix.h"
-#include "cmd_line.h"
+#include "selection_cmd_line.h"
 #include "create_transition_rates.h"
-#include "read_cmd_line.h"
+#include "selection_read_cmd_line.h"
 #include "evaluate_vertex.h"
 #include "check_vertex.h"
 #include "sort_vertices.h"
@@ -61,7 +61,7 @@ using namespace std ;
 #include "binomial.h"
 #include "read_emissions.h"
 #include "genotype_emissions.h"
-#include "read_input.h"
+#include "selection_read_input.h"
 #include "nelder_mead.h"
 #include "golden_search.h"
 #include "bootstrap.h"

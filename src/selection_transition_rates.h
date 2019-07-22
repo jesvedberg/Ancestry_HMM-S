@@ -318,7 +318,7 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
             i++;
         }
 
-        cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << "\t" << point3.lnl << "\t" << point4.lnl << "\t" << (point3.lnl+point4.lnl)/2 << "\t" << point0.lnl << "\t" << endl;
+        cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << "\t" << point3.lnl << "\t" << point4.lnl << "\t" << (point3.lnl+point4.lnl)/2 << "\t" << point0.lnl << endl;
     }
 }
 
