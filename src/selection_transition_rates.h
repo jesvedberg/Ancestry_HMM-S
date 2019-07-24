@@ -41,7 +41,7 @@ void selection_transition_matrix(map<int,vector<mat> > &transition_matrix , vect
 vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector<double> &recombination_rate, cmd_line &options, vector<int> &position, vector < vector<double> > &genofreqs, vector <vector<double>> &split_vecs, map <double,vector<double>> &sel_trajectories) {
     point.sel = 0.5 * point.sel;
 
-    cerr << "strg0: point " << point.pos << "  " << point.sel << endl;
+    //cerr << "strg0: point " << point.pos << "  " << point.sel << endl;
 
     //vector<double> vecf ;
     //vector<double> vecb ;
@@ -77,7 +77,7 @@ vector<vector<mat>> selection_transition_rates_genotypes(selection point, vector
         sel_traject = it->second;
     }
     
-    cerr << "Point: sel: " << point.pos << " " << point.sel << endl;
+    //cerr << "Point: sel: " << point.pos << " " << point.sel << endl;
 
     
     /* cerr << point << endl;
@@ -177,7 +177,7 @@ double selection_evaluate_point_genotypes(selection &point, vector<markov_chain>
                 selection_transition_matrix( transition_matrix, transition_matrix_information[markov_chain_information[m].ploidy_switch[p]], recombination_rate, position, markov_chain_information[m].ploidy_switch[p], t_rates[i] ) ;
             }
         }
-        cerr << "tr_matrix: " << transition_matrix.size() << endl;
+        //cerr << "tr_matrix: " << transition_matrix.size() << endl;
         /// compute transitions within a state
         vector<mat> interploidy_transitions ;
         //interploidy_transitions = create_interploidy_transitions( state_changes, vertex, options.ancestry_proportion ) ;
@@ -318,7 +318,8 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
             i++;
         }
 
-        cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << "\t" << point3.lnl << "\t" << point4.lnl << "\t" << (point3.lnl+point4.lnl)/2 << "\t" << point0.lnl << endl;
+        //cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << "\t" << point3.lnl << "\t" << point4.lnl << "\t" << (point3.lnl+point4.lnl)/2 << "\t" << point0.lnl << endl;
+        cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << endl;
     }
 }
 
