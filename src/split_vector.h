@@ -16,9 +16,9 @@ int int_min(int a, int b){
     return minout;
 }
 
-vector <vector<double>> split_vector(int sel_site, vector<double> &whole_vec, cmd_line &options) 
+vector <vector<double> > split_vector(int sel_site, vector<double> &whole_vec, cmd_line &options) 
 {
-    vector <vector<double>> split_vecs;
+    vector <vector<double> > split_vecs;
     vector<double> fwd_vec;
     vector<double> back_vec;
 

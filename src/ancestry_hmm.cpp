@@ -201,8 +201,8 @@ int main ( int argc, char *argv[] ) {
         double lnl;
         test_sel.pos = options.test_pos;
         test_sel.sel = options.test_sel;
-        vector <vector<double>> split_vecs;
-        map <double,vector<double>> sel_trajectories;
+        vector <vector<double> > split_vecs;
+        map <double,vector<double> > sel_trajectories;
         lnl = selection_evaluate_point_genotypes(test_sel, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list, split_vecs, sel_trajectories);
         cout << "lnL for a selected site s=" << test_sel.sel << " at position " << test_sel.pos << " is: " << lnl << endl;
         return 0;

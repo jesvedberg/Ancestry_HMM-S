@@ -156,8 +156,8 @@ selection selection_reflection(vector<selection> &vertex, double mod, vector<mar
     selection_check_point(newpoint, options);
 
     // calculates likelihood
-    vector <vector<double>> split_vecs;
-    map <double,vector<double>> sel_trajectories;
+    vector <vector<double> > split_vecs;
+    map <double,vector<double> > sel_trajectories;
     selection_evaluate_point_genotypes( newpoint, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
 
     return newpoint;
@@ -178,14 +178,14 @@ vector<selection> selection_shrink(vector<selection> &vertex, double mod, vector
     point2.pos = vertex[0].pos - (vertex[0].pos - vertex[2].pos)/2;
     
     selection_check_point(point1, options);
-    vector <vector<double>> split_vecs;
-    map <double,vector<double>> sel_trajectories;
+    vector <vector<double> > split_vecs;
+    map <double,vector<double> > sel_trajectories;
     selection_evaluate_point_genotypes( point1, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
     new_vertex.push_back(point1);
 
     selection_check_point(point2, options);
-    vector <vector<double>> split_vecs2;
-    map <double,vector<double>> sel_trajectories2;
+    vector <vector<double> > split_vecs2;
+    map <double,vector<double> > sel_trajectories2;
     selection_evaluate_point_genotypes( point2, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs2, sel_trajectories2 ) ;
     new_vertex.push_back(point2);
 
@@ -261,8 +261,8 @@ selection selection_nelder_mead(cmd_line &options, vector<markov_chain> &markov_
         // calculates likelihood for start vertex
         // Check parameters
         for ( int v = 0 ; v < vertex.size() ; v ++ ) {
-                vector <vector<double>> split_vecs;
-                map <double,vector<double>> sel_trajectories; // WARNING: should probably only be defined once in the beginning of Nelder-Mead and then sent as an argument to all subfunctions
+                vector <vector<double> > split_vecs;
+                map <double,vector<double> > sel_trajectories; // WARNING: should probably only be defined once in the beginning of Nelder-Mead and then sent as an argument to all subfunctions
                 vertex[v].lnl = selection_evaluate_point_genotypes( vertex[v], markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
                 cout << vertex[v] << endl;
             }
