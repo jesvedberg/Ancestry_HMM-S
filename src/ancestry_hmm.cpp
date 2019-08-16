@@ -187,8 +187,10 @@ int main ( int argc, char *argv[] ) {
         int p_step = options.grid_pstep;
 
         double s_start = options.grid_sstart;
-        double s_stop = options.grid_sstop;
+        double s_stop = selection_get_max_sel(options.grid_sstart, options.grid_sstop, options.grid_sstep, options.ancestry_pulses[1].proportion, options.ancestry_pulses[1].time, options.ne);
         double s_step = options.grid_sstep;
+
+        cerr << "Grid search. Likelihood calculated for values of selection between " << s_start << " and " << s_stop << endl;
 
         selection_grid(p_start, p_stop, p_step, s_start, s_stop, s_step, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list);
         return 0;

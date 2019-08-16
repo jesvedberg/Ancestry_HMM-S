@@ -101,6 +101,7 @@ public:
     int gs_pstep;
     double gs_sstart;
     double gs_sstop;
+    double gs_sstep;
     int gs_max_iterations;
     double gs_precision;
     

@@ -94,6 +94,7 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
     // golden section search (gss) parameters
     //gs_max_iterations = 50; // max number of iterations in gss
     gs_precision = 1e-5; // minimum recision in estimation of selection coeffient in gss
+    gs_sstep = 0.001;
     
 	/// accept command line parameters
 	for (int i=1; i<argc; i++) {

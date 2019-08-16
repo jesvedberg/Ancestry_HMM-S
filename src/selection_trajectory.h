@@ -7,7 +7,7 @@ void selection_trajectory(vector<double> &freq, double s, int tt, double m, int 
 {
     // returns flat vector if selection is 0 (ie, no change in ellele frequency over time)
     if ( s == 0) {
-        freq.assign(generations,m); // maybe use a different value than 0.5??? But ony 0.5 works!?!?!
+        freq.assign(generations,m);
         return;
     }
 
@@ -34,5 +34,49 @@ void selection_trajectory(vector<double> &freq, double s, int tt, double m, int 
 
     //return freq;
 }   
+
+bool selection_reaches_fixation(double s, double m, int generations, int n) 
+{
+    double max_freq = 0.99;
+    int tt = 0;
+    int t0 = 0;
+    int t0min = 0;
+    bool found = false;
+    double f;
+
+    s *= 0.5;
+
+    // loops over generations until initial frequency (m) is reached + number of generations (gen) has passed
+    while (found == false) {
+        f = 1 / (1 + 2 * n * s * exp(-s*t0));
+        if (f > max_freq) {
+            cerr << "Frequency " << f << " generation " << t0-tt << " selection " << s <<endl;
+            return true;
+        }
+        else if (f > m) {
+            if (tt == 0) {
+                tt = t0;
+                // cout << f << " " << tt << endl;
+            }
+            else if (t0 == (tt + generations)) {
+                return false;
+            }
+        }
+        t0++;
+    }
+}
+
+double selection_get_max_sel(double min_s, double max_s, double step_s, double m, int generations, int n)
+{
+    cerr << "selection_get_max_sel " << min_s << " " << max_s << " " << step_s << " " << m << " " << generations << " " << n << endl;
+    double last_s = 0;
+    for (double s = min_s; s <= max_s; s += step_s) {
+        if (selection_reaches_fixation(s, m, generations, n) == true) {
+            return last_s;
+        }
+        last_s = s;
+    }
+    return max_s;
+}
 
 #endif

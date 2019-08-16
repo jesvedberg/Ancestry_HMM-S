@@ -241,6 +241,15 @@ void selection_grid(int p_start, int p_stop, int p_step, double s_start, double 
             point.pos = p;
             point.sel = s;
             selection_evaluate_point_genotypes( point, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
+
+            /*double m = options.ancestry_pulses[1].proportion;
+            int generations = options.ancestry_pulses[1].time ;
+            int n = options.ne ; /// DOUBLE CHECK HAPLOID/DIPLOID!!    
+            int tt = 0;
+            vector<double> sel_traject ;
+            selection_trajectory(sel_traject, point.sel*0.5, tt, m, generations, n) ;
+            cout << position[point.pos] << "\t" << point.sel << "\t" << setprecision(12) << point.lnl-point0.lnl << "\t" << sel_traject.back() << endl;
+            */
             cout << position[point.pos] << "\t" << point.sel << "\t" << setprecision(12) << point.lnl-point0.lnl << endl;
         }
     }
@@ -253,6 +262,9 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
 
     int pstart;
     int pstop;
+
+    double gs_stop = selection_get_max_sel(options.gs_sstart, options.gs_sstop, options.gs_sstep, options.ancestry_pulses[1].proportion, options.ancestry_pulses[1].time, options.ne);
+    cerr << "Golden section search search. Likelihood calculated for values of selection between " << options.gs_sstart << " and " << gs_stop << endl;
 
     if (options.is_coord ==  true) {
         pstart = get_position(options.gs_pstart, position);
@@ -291,7 +303,8 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
         point4.pos = p;
 
         point1.sel = options.gs_sstart;
-        point2.sel = options.gs_sstop;
+        //point2.sel = options.gs_sstop;
+        point2.sel = gs_stop;
         point3.sel = point2.sel - (point2.sel - point1.sel) / GR;
         point4.sel = point1.sel + (point2.sel - point1.sel) / GR;
 
