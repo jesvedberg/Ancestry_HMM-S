@@ -95,6 +95,9 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
     //gs_max_iterations = 50; // max number of iterations in gss
     gs_precision = 1e-5; // minimum recision in estimation of selection coeffient in gss
     gs_sstep = 0.001;
+
+    // number of runs for the stochastic trajectory function
+    stochastic_reps = 1000;
     
 	/// accept command line parameters
 	for (int i=1; i<argc; i++) {
@@ -353,6 +356,14 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
         if ( strcmp(argv[i],"--traj") == 0 ) {
             traj_function = atoi(argv[++i]) ;
         }
+
+        if ( strcmp(argv[i],"--stochastic") == 0 ) {
+            use_stochastic = true;
+        }
+
+        if ( strcmp(argv[i],"--stochastic_reps") == 0 ) {
+            stochastic_reps = atoi(argv[++i]) ;
+        }
     }
     
     if ( input_file == "null" ) {
@@ -365,7 +376,12 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
         print_usage() ;
         exit(1) ;
     }
-        
+
+    /// Makes sure that you cant run the stochastic trajectory function with the 3 or 4-point algorithms
+    ///if (use_stochastic = true) {
+    ///    traj_function = 0;
+    ///}
+
     return ;
 }
 

@@ -20,6 +20,7 @@
 #include <utility> // JS
 #include <iomanip> // JS
 #include <cstdlib> // JS
+#include <random> // JS  ++++++++ REQUIRES C++11 +++++++++++
 
 
 /// linear algebra library is armadillo
@@ -72,6 +73,7 @@ using namespace std ;
 #include "selection_trajectory.h" // JS
 #include "split_vector.h" // JS
 #include "selection_forward.h" // JS
+#include "selection_stochastic_traj.h" //JS
 #include "selection_transition_rates.h" // JS
 #include "selection_nelder_mead.h" // JS
 

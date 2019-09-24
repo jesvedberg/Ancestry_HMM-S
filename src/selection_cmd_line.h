@@ -114,6 +114,9 @@ public:
     double win_morgan;
     double win_percent;
     // int win_bp;
+
+    bool use_stochastic;
+    int stochastic_reps;
     
     /// read relevant information
     void read_cmd_line ( int argc, char *argv[] ) ;

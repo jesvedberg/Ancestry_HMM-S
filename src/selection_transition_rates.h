@@ -69,12 +69,24 @@ vector<vector<mat> > selection_transition_rates_genotypes(selection point, vecto
     map <double,vector<double> >::iterator it;
     it = sel_trajectories.find(point.sel);
 
-    if (it == sel_trajectories.end()) {
-        selection_trajectory(sel_traject, point.sel, tt, m, generations, n) ; // change tt
-        sel_trajectories[point.sel] = sel_traject;
+    if (options.use_stochastic == true) {
+        if (it == sel_trajectories.end()) {
+            cout << point.sel << " " ;
+            selection_stochastic_trajectory(sel_traject, point.sel, m, generations, n, options.stochastic_reps) ; // change tt
+            sel_trajectories[point.sel] = sel_traject;
+        }
+        else {
+            sel_traject = it->second;
+        }
     }
     else {
-        sel_traject = it->second;
+        if (it == sel_trajectories.end()) {
+            selection_trajectory(sel_traject, point.sel, tt, m, generations, n) ; // change tt
+            sel_trajectories[point.sel] = sel_traject;
+        }
+        else {
+            sel_traject = it->second;
+        }
     }
     
     //cerr << "Point: sel: " << point.pos << " " << point.sel << endl;
