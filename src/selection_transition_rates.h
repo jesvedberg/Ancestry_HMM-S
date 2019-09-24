@@ -71,7 +71,7 @@ vector<vector<mat> > selection_transition_rates_genotypes(selection point, vecto
 
     if (options.use_stochastic == true) {
         if (it == sel_trajectories.end()) {
-            cout << point.sel << " " ;
+            //cout << point.sel << " " ;
             selection_stochastic_trajectory(sel_traject, point.sel, m, generations, n, options.stochastic_reps) ; // change tt
             sel_trajectories[point.sel] = sel_traject;
         }
