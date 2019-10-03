@@ -4,7 +4,7 @@ TCFLAGS = -ltcmalloc
 ARMAFLAGS = -larmadillo
 
 all:
-	$(LINK.cc) -std=c++11 -O3 -o ancestry_hmm_v0.1.1_stoch ancestry_hmm.cpp $(TCFLAGS) $(ARMAFLAGS)
+	$(LINK.cc) -std=c++11 -O3 -o ancestry_hmm_v0.1.2 ancestry_hmm.cpp $(TCFLAGS) $(ARMAFLAGS)
 
 
 ## if you do not have a local install of google perftools, please simply remove the TCFlag link. 
@@ -13,4 +13,5 @@ all:
 ## if you have a local armadillo installation, you will need to provide the directory during compile time and possible also link lblas and lapack 
 
 ## v0.1 - 2019-07-02 - algorithm working - first alpha
-## v0.1.1 - 2019-07-11 - different algorithms for calculating the transtion rates was added/
+## v0.1.1 - 2019-07-11 - different algorithms for calculating the transtion rates was added
+## v0.1.2 - 2019-10-03 - added stochastic trajectory function

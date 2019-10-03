@@ -377,11 +377,6 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
         exit(1) ;
     }
 
-    /// Makes sure that you cant run the stochastic trajectory function with the 3 or 4-point algorithms
-    ///if (use_stochastic = true) {
-    ///    traj_function = 0;
-    ///}
-
     return ;
 }
 
