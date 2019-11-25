@@ -210,6 +210,13 @@ double selection_evaluate_point_genotypes(selection &point, vector<markov_chain>
         comb_lnl += lnl;
         go_backwards = true;
     }
+
+    // tries to handle the the situation where the likelihood is undefined = nan
+    if ( options.limit_sel_space == false ) {
+        if (isnan(comb_lnl) == true ) {
+            comb_lnl = -1000000000;
+        }
+    }
     point.lnl = comb_lnl;
     return comb_lnl ;
     // forward probabilities
@@ -275,8 +282,13 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
     int pstart;
     int pstop;
 
-    double gs_stop = selection_get_max_sel(options.gs_sstart, options.gs_sstop, options.gs_sstep, options.ancestry_pulses[1].proportion, options.ancestry_pulses[1].time, options.ne);
-    cerr << "Golden section search search. Likelihood calculated for values of selection between " << options.gs_sstart << " and " << gs_stop << endl;
+    double gs_start = options.gs_sstart;
+    double gs_stop = options.gs_sstop;
+
+    if ( options.limit_sel_space == true ) {
+        gs_stop = selection_get_max_sel(options.gs_sstart, options.gs_sstop, options.gs_sstep, options.ancestry_pulses[1].proportion, options.ancestry_pulses[1].time, options.ne);
+    }
+    cerr << "Golden section search search. Likelihood calculated for values of selection between " << gs_start << " and " << gs_stop << endl;
 
     if (options.is_coord ==  true) {
         pstart = get_position(options.gs_pstart, position);
@@ -314,7 +326,7 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
         point3.pos = p;
         point4.pos = p;
 
-        point1.sel = options.gs_sstart;
+        point1.sel = gs_start;
         //point2.sel = options.gs_sstop;
         point2.sel = gs_stop;
         point3.sel = point2.sel - (point2.sel - point1.sel) / GR;
@@ -343,8 +355,8 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
             i++;
         }
 
-        //cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << "\t" << point3.lnl << "\t" << point4.lnl << "\t" << (point3.lnl+point4.lnl)/2 << "\t" << point0.lnl << endl;
-        cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << endl;
+        cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << "\t" << point3.lnl << "\t" << point4.lnl << "\t" << (point3.lnl+point4.lnl)/2 << "\t" << point0.lnl << endl;
+        //cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << endl;
     }
 }
 

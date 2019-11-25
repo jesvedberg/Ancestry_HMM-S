@@ -107,6 +107,8 @@ public:
     
     bool is_coord;
 
+    bool limit_sel_space;
+
     int traj_function = 0;
 
     // HMM chain window size

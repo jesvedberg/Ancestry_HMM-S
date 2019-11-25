@@ -63,7 +63,7 @@ void selection_stochastic_trajectory(vector<double> &trajectory, double s, doubl
         trajectory.push_back(traj_sum[i]/reps);
         //cout << traj_sum[i]/reps << " ";
     }
-    cout << endl;
+    
 }
 
 #endif

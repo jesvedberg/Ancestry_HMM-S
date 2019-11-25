@@ -52,7 +52,12 @@ void print_usage() {
     cerr << "\t\t\t specify size of Markov chain in percent or Morgans. \"p 10\" extends the markov chain 10% of chromosome length on each side of selected site. \"m 0.1\" extends the windows 0.1 Morgan on each side of the selected site." << endl ;
     cerr << "\t\t--traj [int]" << endl ;
     cerr << "\t\t\t change algorithm for generating selection trajectories. 3: 3-point approximation, 4: 4-point approximation, default: forward iteration." << endl ;
-    
+    cerr << "\t\t--stochastic" << endl ;
+    cerr << "\t\t\t enables the stochastic method for generation selection trajectory." << endl ;
+    cerr << "\t\t--stochastic_reps [int]" << endl ;
+    cerr << "\t\t\t specifies number of simulations for the stochastic trajectory algorithm. default: 10000" << endl ;
+    cerr << "\t\t--full_selection_space" << endl ;
+    cerr << "\t\t\t turns off optimization of the selection coeffient search space." << endl ;
 }
 
 #endif

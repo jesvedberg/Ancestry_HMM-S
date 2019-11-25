@@ -98,6 +98,10 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
 
     // number of runs for the stochastic trajectory function
     stochastic_reps = 1000;
+
+    // optimizes upper bound for the selection coefficient search space. Makes things faster.
+    // Default true. Can be turned off with --full_selection_space
+    limit_sel_space = true;
     
 	/// accept command line parameters
 	for (int i=1; i<argc; i++) {
@@ -363,6 +367,10 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
 
         if ( strcmp(argv[i],"--stochastic_reps") == 0 ) {
             stochastic_reps = atoi(argv[++i]) ;
+        }
+
+        if ( strcmp(argv[i],"--full_selection_space") == 0 ) {
+            limit_sel_space = false;
         }
     }
     

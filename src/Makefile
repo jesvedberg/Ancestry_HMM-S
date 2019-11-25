@@ -4,7 +4,7 @@ TCFLAGS = -ltcmalloc
 ARMAFLAGS = -larmadillo
 
 all:
-	$(LINK.cc) -std=c++11 -O3 -o ancestry_hmm_v0.1.2 ancestry_hmm.cpp $(TCFLAGS) $(ARMAFLAGS)
+	$(LINK.cc) -std=c++11 -O3 -o ancestry_hmm_v0.1.2.test ancestry_hmm.cpp $(TCFLAGS) $(ARMAFLAGS)
 
 
 ## if you do not have a local install of google perftools, please simply remove the TCFlag link. 
