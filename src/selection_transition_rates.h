@@ -39,6 +39,9 @@ void selection_transition_matrix(map<int,vector<mat> > &transition_matrix , vect
 
 // as above, but to use when printing expected genotype frequences across the chromosome
 vector<vector<mat> > selection_transition_rates_genotypes(selection point, vector<double> &recombination_rate, cmd_line &options, vector<int> &position, vector < vector<double> > &genofreqs, vector <vector<double> > &split_vecs, map <double,vector<double> > &sel_trajectories) {
+    
+    // The selection coefficient is halved, since the model uses the haploid coefficient,
+    // but the user specifies the diploid coefficient from the command line
     point.sel = 0.5 * point.sel;
 
     //cerr << "strg0: point " << point.pos << "  " << point.sel << endl;
@@ -92,9 +95,11 @@ vector<vector<mat> > selection_transition_rates_genotypes(selection point, vecto
     //cerr << "Point: sel: " << point.pos << " " << point.sel << endl;
 
     
-    /* cerr << point << endl;
-    for (int i = 0; i < sel_traject.size();i++) {
-        cerr << sel_traject[i] << "\t";
+    /*if (options.test_point == true) {
+        cerr << "Single site selection trajectory: " << endl;
+        for (int i = 0; i < sel_traject.size();i++) {
+            cerr << sel_traject[i] << "\t";
+        }
     }*/
     //cerr << endl << "fwd_iter" << endl;
 

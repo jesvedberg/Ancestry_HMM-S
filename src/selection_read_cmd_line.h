@@ -311,7 +311,7 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
             is_coord = true ; 
         }
 
-        if ( strcmp(argv[i],"--testsel") == 0 ) {
+        if ( strcmp(argv[i],"--site") == 0 ) {
             test_point = true;
             test_pos = atoi(argv[++i]);
             test_sel = atof(argv[++i]);

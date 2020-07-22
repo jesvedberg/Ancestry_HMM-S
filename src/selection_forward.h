@@ -107,12 +107,12 @@ void markov_chain::selection_forward_loop( map<int, vector<mat> > &transition_pr
         //cerr << "fwdloop1" << endl;
         /// if we're at or past the next switch position
         bool ploidy_change = false ;
-        /*if ( i >= ploidy_switch_position[ploidy_index+1] ) {
+        if ( i >= ploidy_switch_position[ploidy_index+1] ) {
             ploidy_index ++ ;
             if ( ploidy_switch[ploidy_index] != ploidy_switch[ploidy_index-1] ) {
                 ploidy_change = true ;
             }
-        }*/
+        }
         /// resize matrix
         alphas[j].resize( transition_probabilites[ploidy_switch[ploidy_index]][1].n_cols ) ;
         //cerr << "n_cols: " << i << " " << transition_probabilites[ploidy_switch[ploidy_index]].size() << endl;
@@ -163,12 +163,12 @@ void markov_chain::selection_forward_loop_reverse( map<int, vector<mat> > &trans
         //cerr << "revloop1" << endl;
         /// if we're at or past the next switch position
         bool ploidy_change = false ;
-        /*if ( i >= ploidy_switch_position[ploidy_index+1] ) {
+        if ( i >= ploidy_switch_position[ploidy_index+1] ) {
             ploidy_index ++ ;
             if ( ploidy_switch[ploidy_index] != ploidy_switch[ploidy_index-1] ) {
                 ploidy_change = true ;
             }
-        }*/
+        }
         /// resize matrix
         alphas[j].resize( transition_probabilites[ploidy_switch[ploidy_index]][1].n_cols ) ;
         //cerr << "back_n_cols: " << transition_probabilites[ploidy_switch[ploidy_index]].size() << endl;

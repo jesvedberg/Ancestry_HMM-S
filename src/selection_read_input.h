@@ -65,7 +65,6 @@ void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_informati
         if ( options.error_rates == true ) {
             in >> new_line.error_1 >> new_line.error_2 ;
         }
-        
         // read sample panel read counts
         new_line.sample_counts.resize( markov_chain_information.size() ) ;
         for ( int m = 0 ; m < markov_chain_information.size() ; m ++ ) {
@@ -140,7 +139,6 @@ void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_informati
                 }
             }
         }
-        
         /// 
         if ( options.genotype == false ) {
             for ( int m = 0 ; m < markov_chain_information.size() ; m ++ ) {

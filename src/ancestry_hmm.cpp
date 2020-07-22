@@ -189,7 +189,11 @@ int main ( int argc, char *argv[] ) {
         int p_step = options.grid_pstep;
 
         double s_start = options.grid_sstart;
-        double s_stop = selection_get_max_sel(options.grid_sstart, options.grid_sstop, options.grid_sstep, options.ancestry_pulses[1].proportion, options.ancestry_pulses[1].time, options.ne);
+        double s_stop = options.grid_sstop;
+
+        if ( options.limit_sel_space == true ) {
+            selection_get_max_sel(options.grid_sstart, options.grid_sstop, options.grid_sstep, options.ancestry_pulses[1].proportion, options.ancestry_pulses[1].time, options.ne);
+        }
         double s_step = options.grid_sstep;
 
         cerr << "Grid search. Likelihood calculated for values of selection between " << s_start << " and " << s_stop << endl;
@@ -201,14 +205,30 @@ int main ( int argc, char *argv[] ) {
     // if testing a single point. Probably to be removed
     if (options.test_point == true) {
         cout << "Evaluating point: " << options.test_pos << ", " << options.test_sel << endl;
-        selection test_sel;
-        double lnl;
-        test_sel.pos = options.test_pos;
-        test_sel.sel = options.test_sel;
-        vector <vector<double> > split_vecs;
+
         map <double,vector<double> > sel_trajectories;
-        lnl = selection_evaluate_point_genotypes(test_sel, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list, split_vecs, sel_trajectories);
-        cout << "lnL for a selected site s=" << test_sel.sel << " at position " << test_sel.pos << " is: " << lnl << endl;
+        vector <vector<double> > split_vecs;
+
+        selection point0;
+        point0.pos = options.test_pos;
+        point0.sel = 0;
+        selection_evaluate_point_genotypes( point0, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list, split_vecs, sel_trajectories ) ;
+
+        selection point1;
+        point1.pos = options.test_pos;
+        point1.sel = options.test_sel;
+        selection_evaluate_point_genotypes( point1, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_list, split_vecs, sel_trajectories ) ;
+
+        cout << "lnL for a selected site s=" << options.test_sel << " at position " << position[point0.pos] << " is: " << point1.lnl-point0.lnl << endl;
+
+        //selection test_sel;
+        //double lnl;
+        //test_sel.pos = options.test_pos;
+        //test_sel.sel = options.test_sel;
+        //vector <vector<double> > split_vecs;
+        //map <double,vector<double> > sel_trajectories;
+        //lnl = selection_evaluate_point_genotypes(test_sel, markov_chain_information, transition_matrix_information, //recombination_rate, position, options, state_list, split_vecs, sel_trajectories);
+        //cout << "lnL for a selected site s=" << test_sel.sel << " at position " << test_sel.pos << " is: " << lnl << endl;
         return 0;
     }
 

@@ -32,7 +32,7 @@ void read_samples( vector<markov_chain> &markov_chain_information, string &input
         markov_chain_information.push_back( new_sample ) ;
     }
     in.close() ;
-    
+
     /// read or generate ploidy pahts
     for ( int m = 0 ; m < markov_chain_information.size() ; m ++ ) {
         if ( markov_chain_information[m].path_file != "null" ) {
@@ -48,7 +48,7 @@ void read_samples( vector<markov_chain> &markov_chain_information, string &input
             markov_chain_information[m].sample_ploidy_path.push_back( new_entry ) ;
         }
     }
-    
+
     for ( int m = 0 ; m < markov_chain_information.size() ; m ++ ) {
         markov_chain_information[m].end_prob = 1 ;
         markov_chain_information[m].start_prob = 1 ;

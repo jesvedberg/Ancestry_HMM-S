@@ -82,7 +82,7 @@ void create_emissions_matrix_genotype( double n, input_line &new_line, bool &anc
         /// instead just distribute A alleles across sampled chromosomes wihtout replacement
         map<vector<double>, double > A_counts ;
         distribute_alleles( ancestry_states, new_line.sample_counts[sample_index][0], new_line.sample_counts[sample_index][2], A_counts ) ;
-        
+       
         /// now compute probability of each sampling arrangement
         for ( std::map<vector<double>,double>::iterator a = A_counts.begin() ; a != A_counts.end() ; ++ a ) {
             

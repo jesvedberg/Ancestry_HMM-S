@@ -119,6 +119,8 @@ public:
 
     bool use_stochastic;
     int stochastic_reps;
+
+    bool test_point;
     
     /// read relevant information
     void read_cmd_line ( int argc, char *argv[] ) ;

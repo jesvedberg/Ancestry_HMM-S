@@ -151,9 +151,12 @@ vector<mat> fwd_iter_genotype_freq(vector<double> &recombination_rate, vector<do
     //cerr << "genofreq\t" << positions[0]  << "\t" << basefreq.back() << endl;
     //cerr << "cp1 ";
 
+    cerr << "Fwd_trans " << endl;
+
+
     for ( int site = 0 ; site < recombination_rate.size() ; site ++ ) {
         //for (double site = 0; site < 0.5 ; site += r) {
-        r = recombination_rate[site] ;
+        r = recombination_rate[site] ;  
         //vector<double> tr ;
         mat tr_mat(2,2);
         //freq_[tt+1] = m ;
@@ -204,6 +207,9 @@ vector<mat> fwd_iter_genotype_freq(vector<double> &recombination_rate, vector<do
         tr_mat(1,0) = h21/(h21+h22);
         tr_mat(1,1) = 1 - h21/(h21+h22);
 
+        cerr << "Approx:\t" << 0 << "\t" << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << "\t" << tr_mat(0,1)/r << "\t" << tr_mat(1,0)/r << endl;
+
+        //cerr << "Transition rates: " << endl;
         //cerr << tr_mat(0,0) << " " << tr_mat(0,1) << " " << tr_mat(1,0) << " " << tr_mat(1,1) << endl;
         //cerr << "genofreq\t" << positions[site]  << "\t" << genofreq << endl;
         //genofreq = genofreq * (1 + tr_mat(1,0) - tr_mat(0,1));
@@ -362,6 +368,8 @@ vector<mat> approx_curve(vector<double> &recombination_rate, vector<double> &bas
     double r_est = 0.0001;
     double x1 = 0.01;
     double x2 = 0.1;
+
+    cerr << "  4p_Transition rates" << endl;
     
     // compute 4 anchor points to generate curve
 
@@ -420,7 +428,7 @@ vector<mat> approx_curve(vector<double> &recombination_rate, vector<double> &bas
         tr_mat(1,0) = r*sel_trans;
         tr_mat(1,1) = 1 - r*sel_trans; */
 
-        //cerr << "Approx:\t" << cumulative_r << "\t" << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << "\t" << tr_mat(0,1)/r << "\t" << tr_mat(1,0)/r << endl;
+        cerr << "Approx:\t" << cumulative_r << "\t" << r << "\t" << tr_mat(0,1) << "\t" <<  tr_mat(1,0) << "\t" << tr_mat(0,1)/r << "\t" << tr_mat(1,0)/r << endl;
 
         //diff = tr_mat(0,1);
 
