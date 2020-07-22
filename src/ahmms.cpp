@@ -81,7 +81,6 @@ using namespace std ;
 #include "selection_forward.h"
 #include "selection_stochastic_traj.h"
 #include "selection_transition_rates.h"
-#include "selection_nelder_mead.h"
 
 
 

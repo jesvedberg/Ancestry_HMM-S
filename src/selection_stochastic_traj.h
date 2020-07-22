@@ -27,7 +27,6 @@ void selection_stochastic_trajectory(vector<double> &trajectory, double s, doubl
         n_nonsel = ne * (1 - m);
     
         fixed_freq = 0;
-        //cout << "a1 ";
         vector<double> traj(generations+1,0);
         traj[0] += m;
 
@@ -54,14 +53,12 @@ void selection_stochastic_trajectory(vector<double> &trajectory, double s, doubl
                 traj_sum[f] += traj[f];
             }
             rcount++;
-            //cout << "a3 ";
         }
         not_lost_fixed = true;
     }
     
     for (int i = 0; i < traj_sum.size(); i++) {
         trajectory.push_back(traj_sum[i]/reps);
-        //cout << traj_sum[i]/reps << " ";
     }
     
 }

@@ -100,15 +100,8 @@ void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_informati
 
             /// Changing recombination rate to no longer be specified per basepair. JS
             recombination_rate.push_back( new_line.recombination_rate ) ;
-            /// recombination_rate.push_back( new_line.recombination_rate/ ( new_line.pos - position.back() ) ) ;
         }
      
-        /// Determine position of selected site in output vector
-        /*if (options.is_limit == true) {
-            if (new_line.pos == options.sel_site) {
-                sel_pos = ipos ;
-            }
-        } */
         ipos++ ;
 
         /// record position
@@ -157,10 +150,6 @@ void read_file ( cmd_line &options, vector<markov_chain> &markov_chain_informati
             }
         }
     }
-
-    /// WARNING: may cause problems. Not sure what recombination_rate will be when analyzing multiple chromosomes.
-    //options.pos_min = 0 + options.pos_margin;
-    //options.pos_max = recombination_rate.size() - options.pos_margin;
 
     
     /// to avoid lookahead errors

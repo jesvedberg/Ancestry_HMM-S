@@ -69,33 +69,29 @@ public:
     int block_size ; 
 
     /// +=+=+=+=+=+=+ selection +=+=+=+=+=+=+
-    bool is_limit;
-    string limit_chr ;
-    int limit_win_start ;
-    int limit_win_end ;
-    //int sel_site ;
-    double sel_min;
-    double sel_max;
-    int pos_margin;
-    int pos_min;
-    int pos_max;
-    double pos_limit;
-    double sel_limit;
-    bool is_limitpos;
 
-    bool calc_grid;
-    int grid_pstart;
+
+    bool is_limit; // limits to only one chromosome
+    string limit_chr ; // specifies which chromosome
+    int limit_win_start ; // window to analyse start
+    int limit_win_end ; // window to analyze end
+
+    // grid search
+    bool calc_grid; // set grid search
+    int grid_pstart; // position start
     int grid_pstop;
     int grid_pstep;
-    double grid_sstart;
+    double grid_sstart; // selection coeffient start
     double grid_sstop;
     double grid_sstep;
 
+    // single site test
     bool test_point;
     int test_pos;
     double test_sel;
 
-    bool run_gss;
+    // golden section search
+    bool run_gss; // set gss search
     int gs_pstart;
     int gs_pstop;
     int gs_pstep;
@@ -105,11 +101,11 @@ public:
     int gs_max_iterations;
     double gs_precision;
     
-    bool is_coord;
+    bool is_coord; // use chromosome coordinates
 
-    bool limit_sel_space;
+    bool limit_sel_space; // use full search space for s
 
-    int traj_function = 0;
+    int traj_function = 0; // set trajectory function
 
     // HMM chain window size
     string win_unit;
@@ -117,11 +113,10 @@ public:
     double win_percent;
     // int win_bp;
 
-    bool use_stochastic;
-    int stochastic_reps;
+    // stochastic trajectory
+    bool use_stochastic; // use stochastic trajectory function
+    int stochastic_reps; // how many repeats
 
-    bool test_point;
-    
     /// read relevant information
     void read_cmd_line ( int argc, char *argv[] ) ;
 

@@ -2,6 +2,9 @@
 #define __SELECTION_NELDER_MEAD_H
 
 
+// The Nelder mead method is no longer used in AHMM-S
+// This file is therefor not necessary and is included out of laziness
+
 // sorts vertex. can probably be optimized
 void selection_sort_vertex( vector<selection> &v ) {
     sort(v.begin(), v.end());

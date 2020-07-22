@@ -44,28 +44,15 @@ vector<vector<mat> > selection_transition_rates_genotypes(selection point, vecto
     // but the user specifies the diploid coefficient from the command line
     point.sel = 0.5 * point.sel;
 
-    //cerr << "strg0: point " << point.pos << "  " << point.sel << endl;
-
-    //vector<double> vecf ;
-    //vector<double> vecb ;
+    // splits the chromosome into two vectors and trims them based on window size
     if (split_vecs.size() == 0) {
         split_vecs = split_vector(point.pos, recombination_rate, options) ;
     }
-
-    //cerr << "strg1: after vecf, recombination_rate.size()  " << recombination_rate.size() << endl;
-
-    //vector<int> posvecf ;
-    //vector<int> posvecb ;
-    //split_vector_int(point.pos, position, posvecb, posvecf) ;
-
-    //cerr << "strg2: after posvecf  ";
 
     double m = options.ancestry_pulses[1].proportion;
     int generations = options.ancestry_pulses[1].time ;
     int n = options.ne ; /// DOUBLE CHECK HAPLOID/DIPLOID!!    
     int tt = 0;
-
-    //cerr << "Stats. m=" << m << " generations=" << generations << " ne=" << n << endl;
 
     // generates vector with allele frequencies of selected allele over time
     vector<double> sel_traject ;
@@ -74,7 +61,6 @@ vector<vector<mat> > selection_transition_rates_genotypes(selection point, vecto
 
     if (options.use_stochastic == true) {
         if (it == sel_trajectories.end()) {
-            //cout << point.sel << " " ;
             selection_stochastic_trajectory(sel_traject, point.sel, m, generations, n, options.stochastic_reps) ; // change tt
             sel_trajectories[point.sel] = sel_traject;
         }
@@ -92,21 +78,6 @@ vector<vector<mat> > selection_transition_rates_genotypes(selection point, vecto
         }
     }
     
-    //cerr << "Point: sel: " << point.pos << " " << point.sel << endl;
-
-    
-    /*if (options.test_point == true) {
-        cerr << "Single site selection trajectory: " << endl;
-        for (int i = 0; i < sel_traject.size();i++) {
-            cerr << sel_traject[i] << "\t";
-        }
-    }*/
-    //cerr << endl << "fwd_iter" << endl;
-
-    //vector<mat> fwd_trans = fwd_iter(vecf, sel_traject, tt, m, generations, n) ;
-    //vector<mat> back_trans = fwd_iter(vecb, sel_traject, tt, m, generations, n) ;
-
-    // generates two 
     
     vector<double> gf1;
     vector<double> gf2;
@@ -116,50 +87,30 @@ vector<vector<mat> > selection_transition_rates_genotypes(selection point, vecto
     vector<mat> fwd_trans;
     vector<mat> back_trans;
 
+    // checks which trajectory function to use (4point, 3point or forward iteration)
     if (options.traj_function == 4) {
         if (point.sel == 0.0) {
-            //cerr << "fwd_vector" << endl;
             fwd_trans = fwd_iter_genotype_freq(split_vecs[0], sel_traject, m, options.ne, genofreqs[0]) ; //options.ne
-            //cerr << endl << "back_vector" << endl;
             back_trans = fwd_iter_genotype_freq(split_vecs[1], sel_traject, m, options.ne, genofreqs[1]) ;
-            /*genofreqs[0].push_back(sel_traject.back());
-            genofreqs[1].push_back(sel_traject.back());
-            fwd_trans = neutral_rates_vector(split_vecs[0], m, n, generations);
-            back_trans = neutral_rates_vector(split_vecs[1], m, n, generations); */
         }
         else {
             genofreqs[0].push_back(sel_traject.back());
             genofreqs[1].push_back(sel_traject.back());
-            //cerr << "fwd" << endl;
             fwd_trans = approx_curve(split_vecs[0], sel_traject, m) ; //options.ne
-            //cerr << "back" << endl;
             back_trans = approx_curve(split_vecs[1], sel_traject, m) ;
         }
     }
     else if (options.traj_function == 3) {
         genofreqs[0].push_back(sel_traject.back());
         genofreqs[1].push_back(sel_traject.back());
-        //cerr << "fwd" << endl;
         fwd_trans = approx_curve_3point(split_vecs[0], sel_traject, m) ; //options.ne
-        //cerr << "back" << endl;
         back_trans = approx_curve_3point(split_vecs[1], sel_traject, m) ;
     }
     else { 
-        //cerr << "fwd_vector" << endl;
         fwd_trans = fwd_iter_genotype_freq(split_vecs[0], sel_traject, m, options.ne, genofreqs[0]) ; //options.ne
-        //cerr << endl << "back_vector" << endl;
         back_trans = fwd_iter_genotype_freq(split_vecs[1], sel_traject, m, options.ne, genofreqs[1]) ;
     }
     
-    // testing vladimir's approximation
-    /*genofreqs[0].push_back(sel_traject.back());
-    genofreqs[1].push_back(sel_traject.back());
-    vector<mat> fwd_trans = approx_curve(split_vecs[0], sel_traject, m) ; //options.ne
-    vector<mat> back_trans = approx_curve(split_vecs[1], sel_traject, m) ;
-     */
-
-    //cerr << "strg4: genofreq  " << genofreqs.size() << "gf1 " << genofreqs[0].size() << endl;
-
     vector<vector<mat> > tr_vector;
     tr_vector.push_back(fwd_trans);
     tr_vector.push_back(back_trans);
@@ -167,22 +118,13 @@ vector<vector<mat> > selection_transition_rates_genotypes(selection point, vecto
 }
 
 double selection_evaluate_point_genotypes(selection &point, vector<markov_chain> &markov_chain_information, map<int, vector<vector< map< vector<transition_information>, double > > > > &transition_matrix_information, vector<double> &recombination_rate, vector<int> &position, cmd_line &options, map<int,vector<vector<int> > > &state_changes, vector <vector<double> > &split_vecs, map <double,vector<double> > &sel_trajectories) {
-    //cerr << "BP2: Before transition rates." << endl;
-    //vector<vector<mat>> t_rates = selection_transition_rates(point, recombination_rate, options);
 
     vector < vector<double> > genofreqs ;
     
     vector<vector<mat> > t_rates = selection_transition_rates_genotypes(point, recombination_rate, options, position, genofreqs, split_vecs, sel_trajectories); // test. remove
     
-    /*for (int i = 0; i < t_rates[0].size(); i++) {
-        cerr << t_rates[0][i] << endl;
-    }*/
-
-    //cerr << "BP3: After transition rates." << endl;
-    
     double comb_lnl = 0;
     bool go_backwards = false;
-    //go_backwards = true;
 
     for (int i=0 ; i < 2 ; i++) {
         // transition matrix
@@ -194,24 +136,15 @@ double selection_evaluate_point_genotypes(selection &point, vector<markov_chain>
                 selection_transition_matrix( transition_matrix, transition_matrix_information[markov_chain_information[m].ploidy_switch[p]], recombination_rate, position, markov_chain_information[m].ploidy_switch[p], t_rates[i] ) ;
             }
         }
-        //cerr << "tr_matrix: " << transition_matrix.size() << endl;
         /// compute transitions within a state
         vector<mat> interploidy_transitions ;
         //interploidy_transitions = create_interploidy_transitions( state_changes, vertex, options.ancestry_proportion ) ;
         
         /// now compute the forward probabilities
         double lnl = 0 ;
-        //cerr << "markov_chain_information.size()  " << markov_chain_information.size() << endl;
         for ( int m = 0 ; m < markov_chain_information.size() ; m ++ ) {
-        //for ( int m = 0 ; m < 1 ; m ++ ) {
-            //cerr << "Sample#: " << m << endl;
-            /*for (int j = 0; j < markov_chain_information[m].emission_probabilities.size();j++) {
-                cerr << "markov_chain_information: " << markov_chain_information[m].emission_probabilities[j] << endl;
-            }
-            continue;*/
             lnl += markov_chain_information[m].selection_forward_probabilities_genotypes( transition_matrix, interploidy_transitions, point, go_backwards, genofreqs[i], position ) ;
         }
-        //cerr << "BP5: After compute forward. " << i << " " << lnl << endl;
         comb_lnl += lnl;
         go_backwards = true;
     }
@@ -224,8 +157,6 @@ double selection_evaluate_point_genotypes(selection &point, vector<markov_chain>
     }
     point.lnl = comb_lnl;
     return comb_lnl ;
-    // forward probabilities
-    // other probabilities ??
 }
 
 // function for calculating likelihoods in a grid
@@ -234,21 +165,29 @@ void selection_grid(int p_start, int p_stop, int p_step, double s_start, double 
 
     map <double,vector<double> > sel_trajectories;
 
+    // check if limits are specified in chromosome coordinates or per site (ie from 1000bp to 2000bp or SNP #1 to SNP #10)
     if (options.is_coord ==  true) {
         int p_start = get_position(options.grid_pstart, position);
         int p_stop = get_position(options.grid_pstop, position);
 
+        cerr << "p_start " << p_start << "p_stop " << p_stop << "p_step " << p_step << endl;
+
         if (p_start == -1) {
-            cerr << "ERROR: specified start coordinate for Golden section search not found on chromosome" << endl;
+            cerr << "ERROR: specified start coordinate for grid not found on chromosome" << endl;
             exit(1);
         }
-        if ( p_start > p_stop ) {
-            cerr << "ERROR: specified stop coordinate for Golden section search is located before start coordinate." << endl;
+        if (p_stop == -1) {
+            cerr << "ERROR: specified STOP coordinate for Golden section search not found on chromosome" << endl;
             exit(1);
         }
     }
+    if ( p_start > p_stop ) {
+        cerr << "ERROR: specified stop coordinate for grid is located before start coordinate." << endl;
+        exit(1);
+    }
+    
 
-    // WARNING: Remove p_start, p_stop etc from arguments
+    // loop over all sites in specified region with p_step steps
     for (int p = p_start; p < p_stop; p+=p_step) {
         
         vector <vector<double> > split_vecs;
@@ -258,22 +197,14 @@ void selection_grid(int p_start, int p_stop, int p_step, double s_start, double 
         point0.pos = p;
         point0.sel = 0;
         selection_evaluate_point_genotypes( point0, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
-        //cout << "point0: " << point0.pos << "\t" << point0.sel << "\t" << setprecision(12) << point0.lnl << endl;
 
+        // loop over selective coeffients
         for (double s = s_start; s < s_stop; s=s+s_step) {
             selection point;
             point.pos = p;
             point.sel = s;
             selection_evaluate_point_genotypes( point, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
 
-            /*double m = options.ancestry_pulses[1].proportion;
-            int generations = options.ancestry_pulses[1].time ;
-            int n = options.ne ; /// DOUBLE CHECK HAPLOID/DIPLOID!!    
-            int tt = 0;
-            vector<double> sel_traject ;
-            selection_trajectory(sel_traject, point.sel*0.5, tt, m, generations, n) ;
-            cout << position[point.pos] << "\t" << point.sel << "\t" << setprecision(12) << point.lnl-point0.lnl << "\t" << sel_traject.back() << endl;
-            */
             cout << position[point.pos] << "\t" << point.sel << "\t" << setprecision(12) << point.lnl-point0.lnl << endl;
         }
     }
@@ -290,37 +221,48 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
     double gs_start = options.gs_sstart;
     double gs_stop = options.gs_sstop;
 
+    // check if using full selection space, if not use s that reaches 0.99 frequency in specified number of generations
     if ( options.limit_sel_space == true ) {
         gs_stop = selection_get_max_sel(options.gs_sstart, options.gs_sstop, options.gs_sstep, options.ancestry_pulses[1].proportion, options.ancestry_pulses[1].time, options.ne);
     }
     cerr << "Golden section search search. Likelihood calculated for values of selection between " << gs_start << " and " << gs_stop << endl;
 
+    // check which coordinate format is used, and convert bp to snp number
     if (options.is_coord ==  true) {
         pstart = get_position(options.gs_pstart, position);
         pstop = get_position(options.gs_pstop, position);
 
         if (pstart == -1) {
-            cerr << "ERROR: specified start coordinate for Golden section search not found on chromosome" << endl;
+            cerr << "ERROR: specified START coordinate for Golden section search not found on chromosome" << endl;
             exit(1);
         }
-        if ( pstart > pstop ) {
-            cerr << "ERROR: specified stop coordinate for Golden section search is located before start coordinate." << endl;
+        if (pstop == -1) {
+            cerr << "ERROR: specified STOP coordinate for Golden section search not found on chromosome" << endl;
             exit(1);
         }
     }
+
     else {
         pstart = options.gs_pstart;
         pstop = options.gs_pstop;
     }
 
+    if ( pstart > pstop ) {
+        cerr << "ERROR: specified STOP coordinate for Golden section search is located before START coordinate." << endl;
+        exit(1);
+    }
+
+    // Golden section searchj
     for (int p = pstart; p < pstop; p+=options.gs_pstep) {
         vector <vector<double> > split_vecs;
 
+        // calculate likelihood for neutral case
         selection point0;
         point0.pos = p;
         point0.sel = 0;
         selection_evaluate_point_genotypes( point0, markov_chain_information, transition_matrix_information, recombination_rate, position, options, state_changes, split_vecs, sel_trajectories ) ;
 
+        // do golden section search
         selection point1;
         selection point2;
         selection point3;
@@ -332,7 +274,6 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
         point4.pos = p;
 
         point1.sel = gs_start;
-        //point2.sel = options.gs_sstop;
         point2.sel = gs_stop;
         point3.sel = point2.sel - (point2.sel - point1.sel) / GR;
         point4.sel = point1.sel + (point2.sel - point1.sel) / GR;
@@ -360,8 +301,10 @@ void selection_golden_section(vector<markov_chain> &markov_chain_information, ma
             i++;
         }
 
-        cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << "\t" << point3.lnl << "\t" << point4.lnl << "\t" << (point3.lnl+point4.lnl)/2 << "\t" << point0.lnl << endl;
-        //cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << endl;
+        // verbose output. used for debugging
+        //cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << "\t" << i << "\t" << point3.lnl << "\t" << point4.lnl << "\t" << (point3.lnl+point4.lnl)/2 << "\t" << point0.lnl << endl;
+        
+        cout << position[point0.pos] << "\t" << (point3.sel+point4.sel)/2 << "\t" << setprecision(12) << ((point3.lnl+point4.lnl)/2)-point0.lnl << endl;
     }
 }
 

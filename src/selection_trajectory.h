@@ -22,7 +22,6 @@ void selection_trajectory(vector<double> &freq, double s, int tt, double m, int 
         if (f > m) {
             if (tt == 0) {
                 tt = t0;
-                // cout << f << " " << tt << endl;
             }
             else if (t0 == (tt + generations)) {
                 found = true;
@@ -32,9 +31,9 @@ void selection_trajectory(vector<double> &freq, double s, int tt, double m, int 
         t0++;
     }
 
-    //return freq;
 }   
 
+// checks if selective coeffient causes site to go to fixation in the time since introgression
 bool selection_reaches_fixation(double s, double m, int generations, int n) 
 {
     double max_freq = 0.99;
@@ -56,7 +55,6 @@ bool selection_reaches_fixation(double s, double m, int generations, int n)
         else if (f > m) {
             if (tt == 0) {
                 tt = t0;
-                // cout << f << " " << tt << endl;
             }
             else if (t0 == (tt + generations)) {
                 return false;
@@ -66,6 +64,8 @@ bool selection_reaches_fixation(double s, double m, int generations, int n)
     }
 }
 
+// returns selection coeffient that reaches 0.99 in the time since introgression
+// used to speed up calculations and prevent division errors
 double selection_get_max_sel(double min_s, double max_s, double step_s, double m, int generations, int n)
 {
     cerr << "selection_get_max_sel " << min_s << " " << max_s << " " << step_s << " " << m << " " << generations << " " << n << endl;

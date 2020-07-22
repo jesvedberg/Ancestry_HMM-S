@@ -81,18 +81,17 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
     is_limit = false ;
     calc_grid = false;
     test_point = false;
-    is_limitpos = false;
     is_coord = false;
 
-    limit_win_start = 0; // if --chr_win is not set, read whole chromosome
-    limit_win_end = 1000000000; // see comment above
+    // if --chr_win is not set, read whole chromosome
+    limit_win_start = 0; 
+    limit_win_end = 1000000000;
 
     win_unit = "p"; // set default window size unit to percent
     win_percent = 100; // default window size in percent
     //win_morgan = 0.1; // default window size in morgans
 
     // golden section search (gss) parameters
-    //gs_max_iterations = 50; // max number of iterations in gss
     gs_precision = 1e-5; // minimum recision in estimation of selection coeffient in gss
     gs_sstep = 0.001;
 
@@ -264,15 +263,6 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
         if ( strcmp(argv[i],"--chr_win") == 0 ) {
             limit_win_start = atoi(argv[++i]) ;
             limit_win_end = atoi(argv[++i]) ;
-            //sel_site = atoi(argv[++i]) ;
-
-            // minimum and maximum limits for selective coeffient to be estimated
-            sel_max = 0.4;
-            sel_min = 0.001;
-            pos_margin = 0; //maybe set this to 1000??
-
-            sel_limit = 0.8;
-            pos_limit = 0.8;
 
             cerr << endl << limit_chr << "\t" << limit_win_start << "\t" << limit_win_end << "\t" << endl ;
 
@@ -317,18 +307,6 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
             test_sel = atof(argv[++i]);
         }
 
-        if ( strcmp(argv[i],"--limitsel") == 0 ) {
-            sel_min = atof(argv[++i]);
-            sel_max = atof(argv[++i]);
-        }
-
-        if ( strcmp(argv[i],"--limitpos") == 0 ) {
-            cout << "limitpos" << endl;
-            is_limitpos = true;
-            pos_min = atoi(argv[++i]);
-            pos_max = atoi(argv[++i]);
-        }
-
         // control window size for selection
         if ( strcmp(argv[i],"--window") == 0 ) {
             win_unit = string(argv[++i]);
@@ -347,9 +325,6 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
                     exit(1) ;
                 }
             }
-            /*else if (win_unit = "b") {
-                win_bp = atoi(argv[++i]);
-            } */
             else {
                 cerr << "\n\n\t\tERROR: wrong unit for window size.\n\n" ;
                 print_usage() ;
