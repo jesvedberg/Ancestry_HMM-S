@@ -1,6 +1,6 @@
-# Ancestry HMM Manual  
+# Ancestry HMM-S Manual  
 
-### Russ Corbett-Detig
+### Jesper Svedberg
 
 #### Download and Compile:  
 
