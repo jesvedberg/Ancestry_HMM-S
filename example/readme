@@ -1,7 +1,5 @@
-cmd line:
+We have included a simulated dataset that can be used for testing if your installation of AHMMS is working properly. in the `example/` subdirectory, you will find the files `example.data` (containing genotype data), `example.ploidy` (containing ploidy information) and `readme` (usage information). The data is from a simulation of an introgressive scenario where a 1% introgression pulse took place 200 generations ago. At position 5,000,000, a locus with a selection coeffient of s=0.05 is located. To run this data use the following command:
 
-./ancestry_hmm -i example.panel -s example.sample -a 2 0.8 0.2 -p 0 100000 0.8 -p 1 10 0.2 -g -e 1e-3
+        $ ahmm-s -i example.data -s example.ploidy  -p 1 1000000 .99 -p 0 200 0.01 --ne 100000 --window p 10 --traj 4 --gss 1 20360 10 0.001 0.15 > example.gss_output.txt
 
-This will fit a model of a single pulse at time 10 with 80% of individuals from the first population, and 20% from the second. 
-Genotypes are used with a uniform error rate of 1e-3. 
-All individuals are ploidy 2. 
+This will run Golden section search at every 10 sites across the chromosome, using the 4-point approximation method, with a window size of 10% of the chromosome and save the output to the file `example.gss_output.txt`. To visualize the output, please use your favourite plotting software.

@@ -11,7 +11,7 @@ void print_usage() {
     cerr << "\t\t-p [int] [int] [float]" << endl ;
     cerr << "\t\t\t ancestry pulse with format, ancestral population, time," << endl ;
     cerr << "\t\t\t and proportion of final ancestry from this pulse" << endl ;
-    cerr << "\t\t--ne [int]\t\teffective population size of the admixed population" << endl ;
+    cerr << "\t\t--ne [int]\n\t\t\teffective population size of the admixed population" << endl ;
 
     cerr << "\n\tselect one of the following working modes:" << endl ;
     
@@ -47,6 +47,7 @@ void print_usage() {
     cerr << "\t\t\t specify size of Markov chain in percent or Morgans." << endl ;
     cerr << "\t\t\t \"p 10\" extends the markov chain 10% of chromosome length on each side of selected site." << endl ;
     cerr << "\t\t\t \"m 0.1\" extends the windows 0.1 Morgan on each side of the selected site." << endl ;
+    cerr << "\t\t\t default: \"p 100\"" << endl ;
     cerr << "\t\t--traj [int]" << endl ;
     cerr << "\t\t\t change algorithm for generating selection trajectories." << endl ;
     cerr << "\t\t\t 4: 4-point approximation, 3: 3-point approximation (legacy option, not recommended)," << endl ;
