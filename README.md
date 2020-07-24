@@ -4,7 +4,7 @@
 
 #### Quick overview
 
-Ancestry_HMM-S (AHMMS) is a program designed to infer adaptive introgression from population genomic data. This README.md file contains a quick and dirty user manual. An updated version will be added shortly. AHMMS is based on the software Ancestry_HMM, and more information about input file types etc. can be found at: https://github.com/russcd/Ancestry_HMM
+Ancestry_HMM-S (AHMMS) is a program designed to infer adaptive introgression from population genomic data. This README.md file contains a short user manual. AHMMS is based on the software Ancestry_HMM, and more information about input file types etc. can be found at: https://github.com/russcd/Ancestry_HMM
 
 #### Download and Compile:  
 
@@ -216,5 +216,5 @@ A preprint describing this software will be submitted to bioRxiv shortly.
 Further references:
 
 * Corbett-Detig, R., and Nielsen, R. (2017). A Hidden Markov Model Approach for Simultaneously Estimating Local Ancestry and Admixture Time Using Next Generation Sequence Data in Samples of Arbitrary Ploidy. PLoS Genet 13.
-* Medina, P., Thornlow, B., Nielsen, R., and Corbett-Detig, R. (2018). Estimating the timing of multiple admixture pulses during local ancestry inference. BioRxiv 314617.
+* Medina, P., Thornlow, B., Nielsen, R., and Corbett-Detig, R. (2018). Estimating the Timing of Multiple Admixture Pulses During Local Ancestry Inference. Genetics 210, 1089–1107.
 * Schumer, M., Powell, D.L., and Corbett‐Detig, R. (2020). Versatile simulations of admixture and accurate local ancestry inference with mixnmatch and ancestryinfer. Molecular Ecology Resources n/a.
