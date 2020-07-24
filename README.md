@@ -1,4 +1,4 @@
-# Ancestry HMM-S Manual  
+# Ancestry_HMM-S Manual  
 
 ### Jesper Svedberg
 
