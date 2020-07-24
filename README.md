@@ -198,8 +198,8 @@ AHMMS uses the same file format for genotype data as Ancestry_HMM. See https://g
 To infer adaptive introgression you need the following data:
 
 * Genotype data from
-        * An admixed focal population
-        * Two unadmixed parental populations
+  * An admixed focal population
+  * Two unadmixed parental populations
 * A recombination map (optional)
 * Simulations of a neutral introgression scenario to determine determine a likelihood ratio cutoff.
 
