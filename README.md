@@ -32,7 +32,7 @@ google-perftools can be installed using homebrew, apt or conda, in a similar way
 
         $ conda install -c conda-forge gperftools
 
-More information on compiling AHMMS using libraries installed using conda can be found in src/Makefile.
+More information on compiling AHMMS using libraries installed using conda can be found in `src/Makefile`.
 
 
 #### Usage
