@@ -3,9 +3,10 @@
 CXXFLAGS =  -std=c++11 -O3
 TCFLAGS = -ltcmalloc 
 ARMAFLAGS = -larmadillo
+CONDAFLAGS = 
 
 all:
-	$(LINK.cc) -o ahmm-s ahmms.cpp $(TCFLAGS) $(ARMAFLAGS)
+	$(LINK.cc) -o ahmm-s ahmms.cpp $(CONDAFLAGS) $(TCFLAGS) $(ARMAFLAGS)
 
 
 ## if you do not have a local install of google perftools, please simply remove the TCFlag link. 
