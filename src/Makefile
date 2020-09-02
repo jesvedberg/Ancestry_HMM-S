@@ -1,10 +1,11 @@
 ##  A MAKEFILE FOR The Ancestry HMM. TO USE, RUN THE COMMAND "make" VIA COMMAND LINE ##
 
+CXXFLAGS =  -std=c++11 -O3
 TCFLAGS = -ltcmalloc 
 ARMAFLAGS = -larmadillo
 
 all:
-	$(LINK.cc) -std=c++11 -O3 -o ahmm-s ahmms.cpp $(TCFLAGS) $(ARMAFLAGS)
+	$(LINK.cc) -o ahmm-s ahmms.cpp $(TCFLAGS) $(ARMAFLAGS)
 
 
 ## if you do not have a local install of google perftools, please simply remove the TCFlag link. 
@@ -25,4 +26,4 @@ all:
 ## v0.1 - 2019-07-02 - algorithm working - first alpha
 ## v0.1.1 - 2019-07-11 - different algorithms for calculating the transtion rates was added
 ## v0.1.2 - 2019-10-03 - added stochastic trajectory function
-## v1.0 - 2020-07-23 - ready to be released
+## v0.9 - 2020-07-23 - ready to be released
