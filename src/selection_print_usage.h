@@ -34,7 +34,7 @@ void print_usage() {
     
     cerr << "\t\t--chr [string]" << endl ;
     cerr << "\t\t\t specify chromosome that will be analyzed" << endl ;
-    cerr << "\t\t\t (only necessary when there are multiple chromosome in input file)" << endl ;
+    cerr << "\t\t\t (only necessary when there are multiple chromosomes in input file)" << endl ;
     cerr << "\t\t--chr_win [int] [int]" << endl ;
     cerr << "\t\t\t limit region on chromosome that will be analyzed" << endl ;
     
@@ -42,7 +42,7 @@ void print_usage() {
     cerr << "\t\t\t specify precision in finding optimal value of s using golden section search. default: 1e-5" << endl ;
     cerr << "\t\t--unit_coords" << endl ;
     cerr << "\t\t\t unit for start and stop position in grid and gss search can be defined as chromosome" << endl ;
-    cerr << "\t\t\t coordinates rather than line in file. default off" << endl ;
+    cerr << "\t\t\t coordinates rather than as line number in input file. default off" << endl ;
     cerr << "\t\t--window [string] [float]" << endl ;
     cerr << "\t\t\t specify size of Markov chain in percent or Morgans." << endl ;
     cerr << "\t\t\t \"p 10\" extends the markov chain 10% of chromosome length on each side of selected site." << endl ;
@@ -50,7 +50,7 @@ void print_usage() {
     cerr << "\t\t\t default: \"p 100\"" << endl ;
     cerr << "\t\t--traj [int]" << endl ;
     cerr << "\t\t\t change algorithm for generating selection trajectories." << endl ;
-    cerr << "\t\t\t 4: 4-point approximation, 3: 3-point approximation (legacy option, not recommended)," << endl ;
+    cerr << "\t\t\t 4: 4-point approximation, 3: 3-point approximation (legacy option, not recommended)." << endl ;
     cerr << "\t\t\t default: forward iteration." << endl ;
     cerr << "\t\t--stochastic" << endl ;
     cerr << "\t\t\t enables the stochastic method for generation selection trajectory." << endl ;
