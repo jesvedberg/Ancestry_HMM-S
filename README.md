@@ -4,7 +4,7 @@
 
 #### Quick overview
 
-Ancestry_HMM-S (AHMMS) is a program designed to infer adaptive introgression from population genomic data. This README.md file contains a short user manual. AHMMS is based on the software Ancestry_HMM, and more information about input file types etc. can be found at: https://github.com/russcd/Ancestry_HMM
+Ancestry_HMM-S (AHMMS) is a program designed to infer adaptive introgression from population genomic data. This README.md file contains a short user manual. A preprint describing this software and our work validate it can be found at https://www.biorxiv.org/content/10.1101/2020.08.02.232934v1 . AHMMS is based on the software Ancestry_HMM, and more information about input file types etc. can be found at: https://github.com/russcd/Ancestry_HMM
 
 #### Download and Compile:  
 
@@ -103,9 +103,9 @@ This will print the following:
 
 AHMMS is a program designed to infer adaptive introgression from population genomic data. As input the following files and parameters need to be specified:
 
-* A data file containing genomic data from a population (-i filename)
-* A ploidy file specifying the ploidy of all individuals in the datafile (-s filename)
-* Population size (--ne int)
+* A data file containing genomic data from a population (`-i filename`)
+* A ploidy file specifying the ploidy of all individuals in the datafile (`-s filename`)
+* Population size (`--ne int`)
 * The time of the introgression even in generations, and the introgression fraction as a decimal number (see below for format).
 * The analysis mode, with the choice of Golden Section Search, Grid Search and Single Site mode.
 
@@ -203,15 +203,15 @@ To infer adaptive introgression you need the following data:
 * A recombination map (optional)
 * Simulations of a neutral introgression scenario to determine determine a likelihood ratio cutoff.
 
-AHMMS has been validated using low coverage pileup data, but it is also possible to use genotype data, or data from a pooled sequencing experiment. Including a detailed recombination map will improve the power to detect adaptive introgression, but if one is lacking, a reasonable flat recombination rate may be enough to detect strong outliers. A simple perl script for converting VCF files to this format is found at `scripts/vcf2ahmm.pl`. This script contains furhter usage information.
+AHMMS has been validated using low coverage pileup data, but it is also possible to use genotype data, or data from a pooled sequencing experiment. Including a detailed recombination map will improve the power to detect adaptive introgression, but if one is lacking, a reasonable flat recombination rate may be enough to detect strong outliers. A simple perl script for converting VCF files to this format is found at `scripts/vcf2ahmm.pl`. This script contains further usage information.
 
-Some parameters that are required by AHMMS has to first be estimated using other software. We recommend estimating the time since introgression and the size of the introgression pulse using Ancestry_HMM, though other similar software may also work well. You will also need to specify a population size, but our validations have shown that AHMMS is not particularly sensitive to messpecification of this parameter, and a reasonable guess may be good enough.
+Some parameters that are required by AHMMS has to first be estimated using other software. We recommend estimating the time since introgression and the size of the introgression pulse using Ancestry_HMM, though other similar software may also work well. You will also need to specify a population size, but our validation work has shown that AHMMS is not particularly sensitive to misspecification of this parameter, and a reasonable guess may be good enough.
 
-See Schumer et al. (2020) https://onlinelibrary.wiley.com/doi/abs/10.1111/1755-0998.13175 for a detailed description of data requirements and a pipeline designed for performing simulations and inferring introgression using Ancestry_HMM. Much of this information is transferrable for using AHMMS as well. Also see Corbett-Detig & Nielsen (2017) and Medina et al (2018) for more details on Ancestry_HMM.
+See Schumer et al. (2020) https://onlinelibrary.wiley.com/doi/abs/10.1111/1755-0998.13175 for a detailed description of data requirements and a pipeline designed for performing simulations and inferring introgression using Ancestry_HMM. Much of this information is transferrable for using AHMMS as well. Also see Corbett-Detig & Nielsen (2017) and Medina et al. (2018) for more details on Ancestry_HMM.
 
 #### References
 
-A preprint describing this software will be submitted to bioRxiv shortly.
+Svedberg, J., Shchur, V., Reinman, S., Nielsen, R., and Corbett-Detig, R. (2020). Inferring Adaptive Introgression Using Hidden Markov Models. BioRxiv 2020.08.02.232934. https://www.biorxiv.org/content/10.1101/2020.08.02.232934v1
 
 Further references:
 
