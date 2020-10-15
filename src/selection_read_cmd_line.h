@@ -168,7 +168,7 @@ void cmd_line::read_cmd_line ( int argc, char *argv[] ) {
         
         if ( strcmp(argv[i],"--help") == 0 ) {
             print_usage() ;
-            exit(1) ; 
+            exit(0) ; 
         }
         
         if ( strcmp(argv[i],"-g") == 0 ) {
