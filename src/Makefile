@@ -6,7 +6,7 @@ ARMAFLAGS = -larmadillo
 CONDAFLAGS = 
 
 all:
-	$(LINK.cc) -o ahmm-s ahmms.cpp $(CONDAFLAGS) $(TCFLAGS) $(ARMAFLAGS)
+	$(CXX) -o ahmm-s ahmms.cpp $(CONDAFLAGS) $(TCFLAGS) $(ARMAFLAGS)
 
 
 ## if you do not have a local install of google perftools, please simply remove the TCFlag link. 
