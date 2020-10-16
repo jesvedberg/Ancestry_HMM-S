@@ -1,12 +1,14 @@
 ##  A MAKEFILE FOR The Ancestry HMM. TO USE, RUN THE COMMAND "make" VIA COMMAND LINE ##
 
-CXXFLAGS =  -std=c++11 -O3
 TCFLAGS = -ltcmalloc 
 ARMAFLAGS = -larmadillo
-CONDAFLAGS = 
 
 all:
-	$(CXX) -o ahmm-s ahmms.cpp $(CONDAFLAGS) $(TCFLAGS) $(ARMAFLAGS)
+	$(CXX) -std=c++11 -O3 $(CXXFLAGS) -o ahmm-s ahmms.cpp  $(ARMAFLAGS) $(TCFLAGS)
+	
+	
+## $(TCFLAGS) $(ARMAFLAGS)
+
 
 
 ## if you do not have a local install of google perftools, please simply remove the TCFlag link. 
