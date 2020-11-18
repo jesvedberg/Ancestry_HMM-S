@@ -40,7 +40,7 @@ If you do not have root access, we recommend installing it using conda/miniconda
 
         $ conda install -c conda-forge armadillo
 
-It is also recommend that users install the google-perftools package as compilation using tcmalloc tends to decrease runtimes, sometimes substantially. However, this is not necessary to use the software.
+It is also recommended that users install the google-perftools package as compilation using tcmalloc tends to decrease runtimes, sometimes substantially. However, this is not necessary to use the software.
 
 google-perftools can be installed using homebrew, apt or conda, in a similar way as described above. Conda example:
 
