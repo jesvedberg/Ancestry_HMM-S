@@ -1,20 +1,34 @@
 # Ancestry_HMM-S Manual  
 
-### Jesper Svedberg
+## Jesper Svedberg
 
-#### Quick overview
+### Quick overview
 
 Ancestry_HMM-S (AHMMS) is a program designed to infer adaptive introgression from population genomic data. This README.md file contains a short user manual. A preprint describing this software and our work validate it can be found at https://www.biorxiv.org/content/10.1101/2020.08.02.232934v1 . AHMMS is based on the software Ancestry_HMM, and more information about input file types etc. can be found at: https://github.com/russcd/Ancestry_HMM
 
-#### Download and Compile:  
+### Installation
+
+AHMMS can be installed either through Bioconda, or by compiling it from source code.
+
+#### Bioconda
+
+[Bioconda](https://bioconda.github.io/) is a repository of bioinformatics software for the [Conda](https://docs.conda.io/en/latest/) package manager. If you have [Conda installed and Bioconda set up](https://bioconda.github.io/user/install.html), you can install AHMMS using the following command:
+
+        $ conda install ancestry_hmm-s
+
+Bioconda is the easiest way to install AHMMS, especially if you do not have root access.
+
+#### Download and compile
+
+The easiest way to build AHMMS from source is to clone this Github repository and compile it:
 
         $ git clone https://github.com/jesvedberg/Ancestry_HMM-S.git
         $ cd Ancestry_HMM-S/src/
         $ make
 
-#### Dependencies:  
+#### Dependencies
 
-Ancestry_HMM-S requires the C++ linear algebra library, armadillo. More information and detailed download instructions can be found here, http://arma.sourceforge.net/. Armadillo can be installed on OSX using homebrew
+If building AHMMS from source code, make surethe C++ linear algebra library armadillo is installed. More information and detailed download instructions can be found here, http://arma.sourceforge.net/. Armadillo can also be installed on OSX using homebrew
 
         $ brew install armadillo
 
@@ -35,7 +49,7 @@ google-perftools can be installed using homebrew, apt or conda, in a similar way
 More information on compiling AHMMS using libraries installed using conda can be found in `src/Makefile`.
 
 
-#### Usage
+### Usage
 
 For a list of options and arguments, see the built in help message:
 
@@ -99,7 +113,7 @@ This will print the following:
                         --full_selection_space
                                 turns off optimization of the selection coeffient search space. (Experimental)
 
-#### Usage concepts
+### Usage concepts
 
 AHMMS is a program designed to infer adaptive introgression from population genomic data. As input the following files and parameters need to be specified:
 
@@ -116,7 +130,7 @@ Further optional parameters for controlling the software are available as seen i
 
 The `--traj 4` flag changes the method for calculating expected transition rates to a fast and accurate 4-point approximative method and the `--window p 10` flag changes the length of the Markov chain to only extend 10% of the chromosome length in each direction going away from the focal site, instead of including the full chromosome. Doing this will speed up compuation time and is generally not expected to lower the accuracy of the method, but depending on for instance the density of variable sites in your data, you may want to make the window larger. Another option is to specify the window size in Morgans instead of as a percentage of the chromosome length. You can for instance set a window size of 2*0.1 Morgan using `--window m 0.1` (1 Morgan on each side of the focal site).
 
-#### Specifying time and size of introgression
+### Specifying time and size of introgression
 
 Specifying the time since introgression and the size of the introgression pulse is done with the `-p` flag. AHMMS assumes that there is a single introgressive pulse that happened once in the past, from a donor population into a receiving population. These two populations are specified by using the `-p` flag twice. The `-p` flag needs the following parameters:
 
@@ -126,7 +140,7 @@ Specifying the time since introgression and the size of the introgression pulse 
 
         -p 0 100 0.1 -p 1 100000 0.9
 
-#### Analysis mode
+### Analysis mode
 
 AHMMS has three different analysis modes: Golden Section Search, Grid Search, and Single Site Mode.
 
@@ -182,7 +196,7 @@ Grid search is useful for visualizing the likelihood surface of your data, and c
         --site SITE S_COEFF
 
 
-#### Usage example
+### Usage example
 
 We have included a simulated dataset that can be used for testing if your installation of AHMMS is working properly. in the `example/` subdirectory, you will find the files `example.data` (containing genotype data), `example.ploidy` (containing ploidy information) and `readme` (usage information). The data is from a simulation of an introgressive scenario where a 1% introgression pulse took place 200 generations ago. At position 5,000,000, a locus with a selection coeffient of s=0.05 is located. To run this data use the following command:
 
@@ -191,7 +205,7 @@ We have included a simulated dataset that can be used for testing if your instal
 This will run Golden section search at every 10 sites across the chromosome, using the 4-point approximation method, with a window size of 10% of the chromosome and save the output to the file `example.gss_output.txt`. To visualize the output, please use your favourite plotting software.
 
 
-#### Preparing data to be used with AHMMS
+### Preparing data to be used with AHMMS
 
 AHMMS uses the same file format for genotype data as Ancestry_HMM. See https://github.com/russcd/Ancestry_HMM for further details.
 
@@ -209,9 +223,9 @@ Some parameters that are required by AHMMS has to first be estimated using other
 
 See Schumer et al. (2020) https://onlinelibrary.wiley.com/doi/abs/10.1111/1755-0998.13175 for a detailed description of data requirements and a pipeline designed for performing simulations and inferring introgression using Ancestry_HMM. Much of this information is transferrable for using AHMMS as well. Also see Corbett-Detig & Nielsen (2017) and Medina et al. (2018) for more details on Ancestry_HMM.
 
-#### References
+### References
 
-Svedberg, J., Shchur, V., Reinman, S., Nielsen, R., and Corbett-Detig, R. (2020). Inferring Adaptive Introgression Using Hidden Markov Models. BioRxiv 2020.08.02.232934. https://www.biorxiv.org/content/10.1101/2020.08.02.232934v1
+**Preprint:** Svedberg, J., Shchur, V., Reinman, S., Nielsen, R., and Corbett-Detig, R. (2020). Inferring Adaptive Introgression Using Hidden Markov Models. BioRxiv 2020.08.02.232934. https://www.biorxiv.org/content/10.1101/2020.08.02.232934v1
 
 Further references:
 
