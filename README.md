@@ -4,7 +4,7 @@
 
 ### Quick overview
 
-Ancestry_HMM-S (AHMMS) is a program designed to infer adaptive introgression from population genomic data. This README.md file contains a short user manual. A preprint describing this software and our work validate it can be found at https://www.biorxiv.org/content/10.1101/2020.08.02.232934v1 . AHMMS is based on the software Ancestry_HMM, and more information about input file types etc. can be found at: https://github.com/russcd/Ancestry_HMM
+Ancestry_HMM-S (AHMMS) is a program designed to infer adaptive introgression from population genomic data. This README.md file contains a short user manual. A preprint describing this software and our work validate it can be found at https://www.biorxiv.org/content/10.1101/2020.08.02.232934v2 . AHMMS is based on the software Ancestry_HMM, and more information about input file types etc. can be found at: https://github.com/russcd/Ancestry_HMM
 
 ### Installation
 
@@ -225,7 +225,7 @@ See Schumer et al. (2020) https://onlinelibrary.wiley.com/doi/abs/10.1111/1755-0
 
 ### References
 
-**Preprint:** Svedberg, J., Shchur, V., Reinman, S., Nielsen, R., and Corbett-Detig, R. (2020). Inferring Adaptive Introgression Using Hidden Markov Models. BioRxiv 2020.08.02.232934. https://www.biorxiv.org/content/10.1101/2020.08.02.232934v1
+**Preprint:** Svedberg, J., Shchur, V., Reinman, S., Nielsen, R., and Corbett-Detig, R. (2020). Inferring Adaptive Introgression Using Hidden Markov Models. BioRxiv 2020.08.02.232934. https://www.biorxiv.org/content/10.1101/2020.08.02.232934v2
 
 Further references:
 
