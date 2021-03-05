@@ -4,7 +4,7 @@
 
 ### Quick overview
 
-Ancestry_HMM-S (AHMMS) is a program designed to infer adaptive introgression from population genomic data. This README.md file contains a short user manual. A preprint describing this software and our work validate it can be found at https://www.biorxiv.org/content/10.1101/2020.08.02.232934v2 . AHMMS is based on the software Ancestry_HMM, and more information about input file types etc. can be found at: https://github.com/russcd/Ancestry_HMM
+Ancestry_HMM-S (AHMMS) is a program designed to infer adaptive introgression from population genomic data. This README.md file contains a short user manual. The paper describing this software and our work to validate it has now been published in *Molecular Biology and Evolution* and can be found here: https://academic.oup.com/mbe/advance-article/doi/10.1093/molbev/msab014/6120794 . AHMMS is based on the software Ancestry_HMM, and more information about input file types etc. can be found at: https://github.com/russcd/Ancestry_HMM
 
 ### Installation
 
@@ -12,7 +12,7 @@ AHMMS can be installed either through Bioconda, or by compiling it from source c
 
 #### Bioconda
 
-[Bioconda](https://bioconda.github.io/) is a repository of bioinformatics software for the [Conda](https://docs.conda.io/en/latest/) package manager. If you have [Conda installed and Bioconda set up](https://bioconda.github.io/user/install.html), you can install AHMMS using the following command:
+[Bioconda](https://bioconda.github.io/) is a repository of bioinformatics software for the [Conda](https://docs.conda.io/en/latest/) package manager. If you have [Conda installed and Bioconda set up properly](https://bioconda.github.io/user/install.html), you can install AHMMS using the following command:
 
         $ conda install ancestry_hmm-s
 
@@ -28,7 +28,7 @@ The easiest way to build AHMMS from source is to clone this Github repository an
 
 #### Dependencies
 
-If building AHMMS from source code, make surethe C++ linear algebra library armadillo is installed. More information and detailed download instructions can be found here, http://arma.sourceforge.net/. Armadillo can also be installed on OSX using homebrew
+If building AHMMS from source code, make sure the C++ linear algebra library armadillo is installed. More information and detailed download instructions can be found here, http://arma.sourceforge.net/. Armadillo can also be installed on OSX using homebrew
 
         $ brew install armadillo
 
@@ -120,15 +120,15 @@ AHMMS is a program designed to infer adaptive introgression from population geno
 * A data file containing genomic data from a population (`-i filename`)
 * A ploidy file specifying the ploidy of all individuals in the datafile (`-s filename`)
 * Population size (`--ne int`)
-* The time of the introgression even in generations, and the introgression fraction as a decimal number (see below for format).
+* The time of the introgression event in generations, and the introgression fraction as a decimal number (see below for format).
 * The analysis mode, with the choice of Golden Section Search, Grid Search and Single Site mode.
 
-Further optional parameters for controlling the software are available as seen in the help message above, but default values are in most cases recommended. We do recommend using the following non default parameters for improved performance, most likely without a loss of precision:
+Further optional parameters for controlling the software are available as seen in the help message above, but default values are in most cases recommended. We do recommend using the following non-default parameters for improved performance, most likely without a loss of precision:
 
         --traj 4
         --window p 10
 
-The `--traj 4` flag changes the method for calculating expected transition rates to a fast and accurate 4-point approximative method and the `--window p 10` flag changes the length of the Markov chain to only extend 10% of the chromosome length in each direction going away from the focal site, instead of including the full chromosome. Doing this will speed up compuation time and is generally not expected to lower the accuracy of the method, but depending on for instance the density of variable sites in your data, you may want to make the window larger. Another option is to specify the window size in Morgans instead of as a percentage of the chromosome length. You can for instance set a window size of 2*0.1 Morgan using `--window m 0.1` (1 Morgan on each side of the focal site).
+The `--traj 4` flag changes the method for calculating expected transition rates to a fast and accurate 4-point approximative method and the `--window p 10` flag changes the length of the Markov chain to only extend 10% of the chromosome length in each direction going away from the focal site, instead of including the full chromosome. Doing this will speed up computation time and is generally not expected to lower the accuracy of the method, but depending on for instance the density of variable sites in your data, you may want to make the window larger. Another option is to specify the window size in Morgans instead of as a percentage of the chromosome length. You can for instance set a window size of 2*0.1 Morgan using `--window m 0.1` (0.1 Morgan on each side of the focal site).
 
 ### Specifying time and size of introgression
 
@@ -152,7 +152,7 @@ With WINDOW_START and WINDOW_END you specify the start and end point of the site
 
 With MINIMUM_S and MAXIUMUM_S, you specify the search space for inferring the selective coeffient s. We recommend setting these values th 0.001 and 0.15 as a start. In actuality, AHMMS will automatically cap the maximum value to whatever value of s that is expected to cause the site to reach a frequency of 0.99 in the specified time since introgression. This cap is used to prevent division-by-0 bugs if a site goes to fixation. You can turn off the cap with `--full_selection_space`, but be warned that this can cause AHMMS to report the likelihood ratio as `nan` under certain outlier conditions. Also, even using this flag, AHMMS will generally not report selective coefficients that are above the standard cap value.
 
-Golden section search will print the selective coeffient that generates the highest likelihood ratio, together with the likelihood ratio for each analysed site to STDOUT. Column order site, selective coefficient, likelihod ratio:
+Golden section search will print the selective coeffient that generates the highest likelihood ratio, together with the likelihood ratio for each analysed site to STDOUT. Column order: site, inferred selective coefficient, likelihod ratio:
 
         64154   0.00102039      -0.0422059912235
         71641   0.00102038967342        -0.0365331203211
@@ -167,7 +167,7 @@ This works in the same way as for Golden section search, with the difference you
 
         --grid 1000 2000 10 0.001 0.01 0.001
 
-will at every 10 site between the 1000:nd and 2000:nd variable site calculate the likelihood ratio for values of s between 0.001 and 0.1 with step length 0.001 (0.001, 0.002, 0.003 ... 0.008, 0.09). The output will be printed to STDOUT as described above:
+will at every 10 sites between the 1000:nd and 2000:nd variable site calculate the likelihood ratio for values of s between 0.001 and 0.1 with step length 0.001 (0.001, 0.002, 0.003 ... 0.098, 0.099). The output will be printed to STDOUT with the same columns as described above:
 
         143625  0.001   0.0623890906572
         143625  0.002   0.113553284202
@@ -189,7 +189,7 @@ will at every 10 site between the 1000:nd and 2000:nd variable site calculate th
         149168  0.009   0.292439335957
         ...
 
-Grid search is useful for visualizing the likelihood surface of your data, and can help when exploring your data, but it is generally slower than Golden section search for actually identifying the optimal values of s.
+Grid search is useful for visualizing the likelihood surface of your data (see figure 1D in our paper for an example), and can help when exploring your data, but it is generally slower than Golden section search for actually identifying the optimal values of s.
 
 **Single site mode** will output the likelihood ratio for a single combination of a site and a selective coeffient. Usage:
 
@@ -217,7 +217,7 @@ To infer adaptive introgression you need the following data:
 * A recombination map (optional)
 * Simulations of a neutral introgression scenario to determine determine a likelihood ratio cutoff.
 
-AHMMS has been validated using low coverage pileup data, but it is also possible to use genotype data, or data from a pooled sequencing experiment. Including a detailed recombination map will improve the power to detect adaptive introgression, but if one is lacking, a reasonable flat recombination rate may be enough to detect strong outliers. A simple perl script for converting VCF files to this format is found at `scripts/vcf2ahmm.pl`. This script contains further usage information.
+AHMMS has been validated using low coverage pileup data, but it is also possible to use genotype data, or data from a pooled sequencing experiment. Including a detailed recombination map will improve the power to detect adaptive introgression, but if one is lacking, a reasonable flat recombination rate may be enough to detect strong outliers. A simple Python script for converting VCF files to this format is found at `scripts/vcf2ahmm.py`. A short user manual for the script can also be found at `scripts/readme.md`.
 
 Some parameters that are required by AHMMS has to first be estimated using other software. We recommend estimating the time since introgression and the size of the introgression pulse using Ancestry_HMM, though other similar software may also work well. You will also need to specify a population size, but our validation work has shown that AHMMS is not particularly sensitive to misspecification of this parameter, and a reasonable guess may be good enough.
 
@@ -225,7 +225,7 @@ See Schumer et al. (2020) https://onlinelibrary.wiley.com/doi/abs/10.1111/1755-0
 
 ### References
 
-**Preprint:** Svedberg, J., Shchur, V., Reinman, S., Nielsen, R., and Corbett-Detig, R. (2020). Inferring Adaptive Introgression Using Hidden Markov Models. BioRxiv 2020.08.02.232934. https://www.biorxiv.org/content/10.1101/2020.08.02.232934v2
+Svedberg, J., Shchur, V., Reinman, S., Nielsen, R., and Corbett-Detig, R. (2021). Inferring Adaptive Introgression Using Hidden Markov Models. Molecular Biology and Evolution. https://doi.org/10.1093/molbev/msab014
 
 Further references:
 
