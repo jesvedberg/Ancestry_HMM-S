@@ -138,7 +138,19 @@ Specifying the time since introgression and the size of the introgression pulse 
 
 `POPULATION_ID` is set to either `0` for the donor population, or `1` for the receiving population. `TIME` specifies the time since introgression in generations for the donor population. For the receiving population you can specify an arbitrarily large number (100000 is a good choice) to indicate that it is the receiving population that has been present for an arbitrarily long time. (The reason for this somewhat convoluted way of specifying time is that AHMMS is based on Ancestry_HMM which can handle more complex introgressive scenarios). `INTROGRESSION_FRACTION` specifies the size of the introgressive pulse. For the donor population it should be specified as the size as a fraction of 1, and for the receiving population it should be specified as one minus the fraction. If you for instance want specify a 10% introgressive pulse that happened 100 generations ago, you use the following command:
 
+        -p 1 100000 0.9 -p 0 100 0.1
+
+**WARNING! Bug in interpretation of `-p` parameter**
+
+We have received user feedback showing that there is a bug in how the `-p` parameter is interpreted. Unless you specify population 1 before population 0, you will get nonsense values. In other words, please specify your population in the following way:
+
+        -p 1 100000 0.9 -p 0 100 0.1
+
+and not
+
         -p 0 100 0.1 -p 1 100000 0.9
+
+We will fix this bug in a future update of Ancestry_HMM-S, but for now the program will work properly as long as you specify `-p 1` before `-p 0`.
 
 ### Analysis mode
 
